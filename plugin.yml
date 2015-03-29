@@ -1,0 +1,41 @@
+name: PrisonMain
+main: org.Prison.Main.Main
+version: 1.0
+description: >
+             Main plugin
+commands:
+  playermode:
+    description: Staff Command
+  setlocation:
+    description: Staff Command
+  tolocation:
+    description: Staff Command 
+  GiveVote:
+    description: Staff Command
+  save:
+    description: Staff Command
+  crystal:
+    description: Staff Command
+  exit:
+    description: Staff Command
+  silence:
+    description: Staff Command 
+  clearchat:
+    description: Staff Command
+  setletter:
+    description: Staff Command
+  setspeed:
+    description: Staff Command
+  setintellect:
+    description: Staff Command
+  booster:
+    description: Staff Command
+  removebooster:
+    description: Staff Command
+  boostertime:
+    description: Staff Command
+  updatelead:
+    description: Staff Command
+  sc:
+    description: Staff Command                                      
+                                        
