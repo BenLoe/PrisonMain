@@ -8,8 +8,8 @@ public class OptionAPI {
 	public static boolean isEnabled(OptionType t, String name){
 		switch(t){
 		case FRIENDS:{
-			if (Files.config().contains("Players." + name + ".Friend")){
-				if (Files.config().getBoolean("Players." + name + ".Friend")){
+			if (Files.getDataFile().contains("Players." + name + ".Friend")){
+				if (Files.getDataFile().getBoolean("Players." + name + ".Friend")){
 					return true;
 				}else{
 					return false;
@@ -19,8 +19,8 @@ public class OptionAPI {
 			}
 		}
 		case VISIBILITY:{
-			if (Files.config().contains("Players." + name + ".Visibility")){
-				if (Files.config().getBoolean("Players." + name + ".Visibility")){
+			if (Files.getDataFile().contains("Players." + name + ".Visibility")){
+				if (Files.getDataFile().getBoolean("Players." + name + ".Visibility")){
 					return true;
 				}else{
 					return false;
@@ -30,8 +30,8 @@ public class OptionAPI {
 			}
 		}
 		case LETTER:{
-			if (Files.config().contains("Players." + name + ".Letter1")){
-				if (Files.config().getBoolean("Players." + name + ".Letter1")){
+			if (Files.getDataFile().contains("Players." + name + ".Letter1")){
+				if (Files.getDataFile().getBoolean("Players." + name + ".Letter1")){
 					return true;
 				}else{
 					return false;
@@ -41,8 +41,8 @@ public class OptionAPI {
 			}
 		}
 		case ACHIEVEMENTS:{
-			if (Files.config().contains("Players." + name + ".Achievements")){
-				if (Files.config().getBoolean("Players." + name + ".Achievements")){
+			if (Files.getDataFile().contains("Players." + name + ".Achievements")){
+				if (Files.getDataFile().getBoolean("Players." + name + ".Achievements")){
 					return true;
 				}else{
 					return false;
@@ -52,8 +52,8 @@ public class OptionAPI {
 			}
 		}
 		case FIXED:{
-			if (Files.config().contains("Players." + name + ".Fixed")){
-				if (Files.config().getBoolean("Players." + name + ".Fixed")){
+			if (Files.getDataFile().contains("Players." + name + ".Fixed")){
+				if (Files.getDataFile().getBoolean("Players." + name + ".Fixed")){
 					return true;
 				}else{
 					return false;
@@ -71,43 +71,43 @@ public class OptionAPI {
 		switch(t){
 		case FRIENDS:{
 			if (isEnabled(OptionType.FRIENDS, p.getName())){
-				Files.config().set("Players." + name + ".Friend", false);
+				Files.getDataFile().set("Players." + name + ".Friend", false);
 			}else{
-				Files.config().set("Players." + name + ".Friend", true);
+				Files.getDataFile().set("Players." + name + ".Friend", true);
 			}
 		}
 		break;
 		case ACHIEVEMENTS:{
 			if (isEnabled(OptionType.ACHIEVEMENTS, p.getName())){
-				Files.config().set("Players." + name + ".Achievements", false);
+				Files.getDataFile().set("Players." + name + ".Achievements", false);
 			}else{
-				Files.config().set("Players." + name + ".Achievements", true);
+				Files.getDataFile().set("Players." + name + ".Achievements", true);
 			}
 		}
 		break;
 		case VISIBILITY:{
 			if (isEnabled(OptionType.VISIBILITY, p.getName())){
-				Files.config().set("Players." + name + ".Visibility", false);
+				Files.getDataFile().set("Players." + name + ".Visibility", false);
 			}else{
-				Files.config().set("Players." + name + ".Visibility", true);
+				Files.getDataFile().set("Players." + name + ".Visibility", true);
 			}
 		}
 		break;
 		case LETTER:{
 			if (isEnabled(OptionType.LETTER, p.getName())){
-				Files.config().set("Players." + name + ".Letter1", false);
+				Files.getDataFile().set("Players." + name + ".Letter1", false);
 			}else{
-				Files.config().set("Players." + name + ".Letter1", true);
+				Files.getDataFile().set("Players." + name + ".Letter1", true);
 			}
 		}
 		case FIXED:{
 			if (isEnabled(OptionType.FIXED, p.getName())){
-				Files.config().set("Players." + name + ".Fixed", false);
+				Files.getDataFile().set("Players." + name + ".Fixed", false);
 			}else{
-				Files.config().set("Players." + name + ".Fixed", true);
+				Files.getDataFile().set("Players." + name + ".Fixed", true);
 			}
 		}
 		}
-		Files.saveConfig();
+		Files.saveDataFile();
 	}
 }

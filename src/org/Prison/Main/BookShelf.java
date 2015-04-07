@@ -29,8 +29,8 @@ public class BookShelf {
 						booster = 3;
 					}
 				}
-				Files.config().set("Players." + p.getName() + ".Smart" , SmartTrait.getSmart(p) + booster);
-				Files.saveConfig();
+				Files.getDataFile().set("Players." + p.getName() + ".Smart" , SmartTrait.getSmart(p) + booster);
+				Files.saveDataFile();
 				SmartTrait.checkLevelUp(p);
 			}
 			break;

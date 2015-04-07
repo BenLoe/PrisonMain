@@ -37,8 +37,8 @@ public class JoinEvent {
 		final Player p = event.getPlayer();
 		SpeedTrait.setCorrectSpeed(p);
 		event.setJoinMessage(null);
-		if (Files.config().contains("Players." + p.getName() + ".Votes")){
-			int current = Files.config().getInt("Players." + p.getName() + ".Votes");
+		if (Files.getDataFile().contains("Players." + p.getName() + ".Votes")){
+			int current = Files.getDataFile().getInt("Players." + p.getName() + ".Votes");
 			if (current >= 50){
 				Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), new Runnable(){
 					public void run(){
@@ -132,16 +132,16 @@ public class JoinEvent {
 				p.sendMessage("   ");
 				p.sendMessage("   ");
 				p.sendMessage("§2§l§m----------------------------------------");
-				if (!Files.config().contains("Players." + p.getName())){
+				if (!Files.getDataFile().contains("Players." + p.getName())){
 					p.sendMessage("§eHey there new player, we suggest taking the welcome tutorial to get yourself started. Just talk to the villager outside the cellblocks. Here are some ancient pickaxes, go and indetify them.");
 					giveAncients(p);
-					Files.config().set("Players." + p.getName() + ".Letter", "A");
-					Files.saveConfig();
+					Files.getDataFile().set("Players." + p.getName() + ".Letter", "A");
+					Files.saveDataFile();
 				}
 				p.updateInventory();
 				p.teleport(Main.getLocation("spawn"));
 			}
-		}, 14l);
+		}, 40l);
 		if (p.getWorld().getName().equals("PVP")){
 			me.BenLoe.PitPvP.InfoBoard.setBoard(p);
 		}else{
@@ -160,6 +160,10 @@ public class JoinEvent {
 		ancient.setItemMeta(ancientm);
 		p.getInventory().addItem(ancient);
 		p.getInventory().addItem(ancient);
+		p.updateInventory();
 	}
 	
+	public static void goodJoin(PlayerJoinEvent event){
+		
+	}
 }

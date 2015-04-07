@@ -6,6 +6,8 @@ description: >
 commands:
   playermode:
     description: Staff Command
+  reloadfiles:
+    description: Staff Command
   setlocation:
     description: Staff Command
   tolocation:

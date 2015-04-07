@@ -3,6 +3,7 @@ package org.Prison.Main;
 import org.Prison.Main.Menu.MainMenu;
 import org.Prison.Main.Ranks.RankType;
 import org.Prison.Main.RegionChecker.CellBlockLines;
+import org.Prison.Main.Storage.SignClickManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -21,6 +22,7 @@ public class ClickEvent {
 
 	public static void click(final PlayerInteractEvent event){
 		Player p = event.getPlayer();
+		SignClickManager.clickHandler(event);
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
 		if (CellBlockLines.ifPlayerIsIn(p.getLocation(), "Visible")){
 		if (event.getClickedBlock().getType().equals(Material.CHEST)){	
@@ -38,6 +40,12 @@ public class ClickEvent {
 			p.openInventory(p.getEnderChest());
 			p.playSound(p.getLocation(), Sound.CHEST_OPEN, 1f, 1f);
 		}
+		}else{
+			if (event.getClickedBlock().getType().equals(Material.CHEST)){
+				if (!PlayerMode.isInPlayerMode(p)){
+				event.setCancelled(true);
+				}
+			}	
 		}
 		}
 		if (p.getInventory().getItemInHand().getType().equals(Material.BLAZE_ROD)){

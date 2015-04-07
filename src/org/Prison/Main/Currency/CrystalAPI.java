@@ -13,8 +13,8 @@ public class CrystalAPI {
 	public static int getCrystals(String p){
 		Files.reloadConfig();
 		String name = p;
-		if (Files.config().contains("Players." + name)){
-			return Files.config().getInt("Players." + name + ".Crystals");
+		if (Files.getDataFile().contains("Players." + name)){
+			return Files.getDataFile().getInt("Players." + name + ".Crystals");
 		}else{
 			return 0;
 		}
@@ -25,12 +25,12 @@ public class CrystalAPI {
 		int old = 0;
 		int newi = 0;
 		String name = p;
-		if (Files.config().contains("Players." + name)){
-			old = Files.config().getInt("Players." + name + ".Crystals");
+		if (Files.getDataFile().contains("Players." + name)){
+			old = Files.getDataFile().getInt("Players." + name + ".Crystals");
 		}
 		newi = i;
-		Files.config().set("Players." + name + ".Crystals", i);
-		Files.saveConfig();
+		Files.getDataFile().set("Players." + name + ".Crystals", i);
+		Files.saveDataFile();
 		if (Bukkit.getPlayerExact(p) != null){
 		Player p1 = Bukkit.getPlayerExact(p);
 		Objective o = p1.getScoreboard().getObjective(DisplaySlot.SIDEBAR);	
@@ -46,14 +46,14 @@ public class CrystalAPI {
 		int old = 0;
 		int newi = 0;
 		String name = p;
-		if (Files.config().contains("Players." + name)){
-			int current = Files.config().getInt("Players." + name + ".Crystals");
+		if (Files.getDataFile().contains("Players." + name)){
+			int current = Files.getDataFile().getInt("Players." + name + ".Crystals");
 			old = current;
 			newi = current + i;
-			Files.config().set("Players." + name + ".Crystals", current + i);
+			Files.getDataFile().set("Players." + name + ".Crystals", current + i);
 		}else{
 			newi = i;
-			Files.config().set("Players." + name + ".Crystals", i);
+			Files.getDataFile().set("Players." + name + ".Crystals", i);
 		}
 		if (Bukkit.getPlayerExact(p) != null){
 		Player p1 = Bukkit.getPlayerExact(p);
@@ -71,14 +71,14 @@ public class CrystalAPI {
 		int old = 0;
 		int newi = 0;
 		String name = p;
-		if (Files.config().contains("Players." + name)){
-			int current = Files.config().getInt("Players." + name + ".Crystals");
+		if (Files.getDataFile().contains("Players." + name)){
+			int current = Files.getDataFile().getInt("Players." + name + ".Crystals");
 			old = current;
 			newi = current - i;
-			Files.config().set("Players." + name + ".Crystals", current - i);
+			Files.getDataFile().set("Players." + name + ".Crystals", current - i);
 		}else{
 			newi = i;
-			Files.config().set("Players." + name + ".Crystals", i);
+			Files.getDataFile().set("Players." + name + ".Crystals", i);
 		}
 		if (Bukkit.getPlayerExact(p) != null){
 			Player p1 = Bukkit.getPlayerExact(p);
@@ -88,6 +88,6 @@ public class CrystalAPI {
 			newscore.setScore(11);
 			p1.getScoreboard().resetScores(oldscore.getEntry());
 			}
-		Files.saveConfig();
+		Files.saveDataFile();
 	}
 }

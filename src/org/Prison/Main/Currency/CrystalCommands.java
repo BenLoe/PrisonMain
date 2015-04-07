@@ -126,7 +126,7 @@ public class CrystalCommands {
 		}
 	
 	public static boolean ifPlayerExists(String p){
-		if (Files.config().contains("Players." + p)){
+		if (Files.getDataFile().contains("Players." + p)){
 			return true;
 		}
 		return false;

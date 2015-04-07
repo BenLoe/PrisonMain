@@ -130,10 +130,10 @@ public enum LetterType {
 		}
 	}
 	public static LetterType getPlayerLetter(Player p){
-		if (Files.config().contains("Players." + p.getName() + ".Letter")){
-			return fromString(Files.config().getString("Players." + p.getName() + ".Letter"));
+		if (Files.getDataFile().contains("Players." + p.getName() + ".Letter")){
+			return fromString(Files.getDataFile().getString("Players." + p.getName() + ".Letter"));
 		}else{
-			Files.config().set("Players." + p.getName() + ".Letter", "A");
+			Files.getDataFile().set("Players." + p.getName() + ".Letter", "A");
 			return LetterType.A;
 		}
 	}
@@ -230,8 +230,8 @@ public enum LetterType {
 		}
 		for (LetterType t : values()){
 			if (t.i == rank + 1){
-				Files.config().set("Players." + p.getName() + ".Letter", t.name);
-				Files.saveConfig();
+				Files.getDataFile().set("Players." + p.getName() + ".Letter", t.name);
+				Files.saveDataFile();
 			}
 		}
 	}

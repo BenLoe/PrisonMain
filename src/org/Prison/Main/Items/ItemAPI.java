@@ -2,15 +2,19 @@ package org.Prison.Main.Items;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import me.BenLoe.Gadgets.Types.*;
+
 import org.Prison.Main.Files;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 public class ItemAPI {
+	@SuppressWarnings("deprecation")
 	public static void givePlayerItems(Player p){
 		Files.reloadConfig();
 		p.getInventory().setItem(7, new ItemStack(Material.AIR));
@@ -34,6 +38,11 @@ public class ItemAPI {
 		ItemStack menu = getItem(Material.NETHER_STAR, ChatColor.GREEN + "Game Menu", lore2);
 		p.getInventory().setItem(7, gadget);
 		p.getInventory().setItem(8, menu);
+		if (p.getInventory().getHelmet() != null){
+		if (p.getInventory().getHelmet().getTypeId() == 397){
+			p.getInventory().setHelmet(null);
+		}
+		}
 		p.updateInventory();
 	}
 	public static ItemStack getItem(Material m, String DisplayName, List<String> Lore){

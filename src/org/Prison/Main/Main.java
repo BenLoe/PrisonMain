@@ -124,6 +124,12 @@ public class Main extends JavaPlugin {
 		if (sender instanceof Player){
 			Player p = (Player) sender;
 			BoosterManager.attemptBoosterCommand(p, args, Label);
+			if (Label.equalsIgnoreCase("reloadfiles")){
+				if (p.isOp()){
+				Files.reloadConfig();
+				p.sendMessage(ChatColor.GREEN + "Reloaded PrisonMain config files.");
+				}
+			}
 			if (Label.equalsIgnoreCase("sc")){
 				if (p.hasPermission("Staff.Chat")){
 					if (args.length == 0){
@@ -148,8 +154,8 @@ public class Main extends JavaPlugin {
 					if (args.length == 2){
 						if (PunishAPI.onlinePlayer(args[0])){
 							p.sendMessage(ChatColor.GREEN + "Player's letter set to " + args[1]);
-							Files.config().set("Players." + args[0] + ".Letter", args[1]);
-							Files.saveConfig();
+							Files.getDataFile().set("Players." + args[0] + ".Letter", args[1]);
+							Files.saveDataFile();
 						}else{
 							p.sendMessage(ChatColor.RED + "Player not online.");
 						}
@@ -163,8 +169,8 @@ public class Main extends JavaPlugin {
 					if (args.length == 2){
 						if (PunishAPI.onlinePlayer(args[0])){
 							p.sendMessage(ChatColor.GREEN + "Player's speed set to " + args[1]);
-							Files.config().set("Players." + args[0] + ".Speed", Integer.parseInt(args[1]));
-							Files.saveConfig();
+							Files.getDataFile().set("Players." + args[0] + ".Speed", Integer.parseInt(args[1]));
+							Files.saveDataFile();
 						}else{
 							p.sendMessage(ChatColor.RED + "Player not online.");
 						}
@@ -178,8 +184,8 @@ public class Main extends JavaPlugin {
 					if (args.length == 2){
 						if (PunishAPI.onlinePlayer(args[0])){
 							p.sendMessage(ChatColor.GREEN + "Player's intellect set to " + args[1]);
-							Files.config().set("Players." + args[0] + ".Smartlvl", Integer.parseInt(args[1]));
-							Files.saveConfig();
+							Files.getDataFile().set("Players." + args[0] + ".Smartlvl", Integer.parseInt(args[1]));
+							Files.saveDataFile();
 						}else{
 							p.sendMessage(ChatColor.RED + "Player not online.");
 						}
@@ -298,18 +304,18 @@ public class Main extends JavaPlugin {
 			if (Label.equalsIgnoreCase("GiveVote")){
 				if (args.length == 1){
 					DeviceType.VOTING_KEY.addAmount(1, args[0]);
-					if (Files.config().contains("Players." + args[0] + ".Votes")){
-						int old = Files.config().getInt("Players." + args[0] + ".Votes");
-						Files.config().set("Players." + args[0] + ".Votes", old + 1);
-						Files.saveConfig();
+					if (Files.getDataFile().contains("Players." + args[0] + ".Votes")){
+						int old = Files.getDataFile().getInt("Players." + args[0] + ".Votes");
+						Files.getDataFile().set("Players." + args[0] + ".Votes", old + 1);
+						Files.saveDataFile();
 						if ((old + 1) == 50){
 							if (Bukkit.getPlayer(args[0]) != null){
 								AchievementAPI.completeAchievement(Bukkit.getPlayer(args[0]), AchievementMenu.THE_VOTING_KING);
 							}
 						}
 					}else{
-						Files.config().set("Players." + args[0] + ".Votes", 1);
-						Files.saveConfig();
+						Files.getDataFile().set("Players." + args[0] + ".Votes", 1);
+						Files.saveDataFile();
 					}
 				}
 			}

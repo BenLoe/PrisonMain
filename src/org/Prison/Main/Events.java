@@ -33,6 +33,7 @@ import org.Prison.Main.Ranks.RankType;
 import org.Prison.Main.RegionChecker.CellBlockLines;
 import org.Prison.Main.RegionChecker.DonatorCellLine;
 import org.Prison.Main.RegionChecker.VisibleLines;
+import org.Prison.Main.Storage.TonyGMenu;
 import org.Prison.Main.Traits.SpeedTrait;
 import org.Prison.Main.Tutorial.Tutorial;
 import org.Prison.Punish.PunishAPI;
@@ -110,6 +111,9 @@ public class Events implements Listener{
 		if (Files.config().getString("Tutorial").equals("ID" + event.getNPC().getId())){
 			Tutorial.start(p);
 		}
+		if (Files.config().getInt("TonyG") == event.getNPC().getId()){
+			TonyGMenu.openMenu(p);
+		}
 	}
 	
 	@EventHandler
@@ -123,21 +127,6 @@ public class Events implements Listener{
 	@EventHandler
 	public void PickupItem(PlayerPickupItemEvent event){
 		Player p = event.getPlayer();
-		if (PiggyBank.Moneys.contains(event.getItem().getUniqueId())){
-			event.getItem().teleport(event.getItem().getLocation().subtract(0, 300, 0));
-			event.setCancelled(true);
-			int amount = event.getItem().getItemStack().getAmount() * 10;
-			event.getItem().teleport(event.getItem().getLocation().subtract(0, 300, 0));
-			MoneyAPI.addMoney(p, amount);
-			p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
-		}
-		if (PiggyBank.Crystals.contains(event.getItem().getUniqueId())){
-			event.getItem().teleport(event.getItem().getLocation().subtract(0, 300, 0));
-			event.setCancelled(true);
-			int amount = event.getItem().getItemStack().getAmount() * 10;
-			CrystalAPI.addCrystals(p.getName(), amount);
-			p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 0.6f);
-		}
 		if (ItemBuyerMenu.inBuyerMenu.containsKey(p.getName())){
 			event.setCancelled(true);
 		}
@@ -209,6 +198,9 @@ public class Events implements Listener{
 			}
 			p.updateInventory();
 			ItemBuyerMenu.inBuyerMenu.remove(p.getName());
+		}
+		if (TonyGMenu.inTonyMenu.contains(p.getName())){
+			TonyGMenu.inTonyMenu.remove(p.getName());
 		}
 	}
 	

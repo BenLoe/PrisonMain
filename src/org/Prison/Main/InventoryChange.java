@@ -7,6 +7,7 @@ import org.Prison.Main.Enchanter.ClickHandler;
 import org.Prison.Main.ItemBuyer.ItemBuyerMenu;
 import org.Prison.Main.Menu.MenuItem;
 import org.Prison.Main.Menu.MenuType;
+import org.Prison.Main.Storage.TonyGMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -41,7 +42,7 @@ public class InventoryChange {
 			if (event.getCurrentItem() != null){
 				if (event.getCurrentItem().hasItemMeta()){
 					if (event.getCurrentItem().getItemMeta().hasDisplayName()){
-					if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Uses") || event.getCurrentItem().getItemMeta().getDisplayName().contains("Gadget")  || event.getCurrentItem().getItemMeta().getDisplayName().contains("Game Menu") || event.getCurrentItem().getItemMeta().getDisplayName().contains("Rainbow")){
+					if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Uses") || event.getCurrentItem().getItemMeta().getDisplayName().contains("Gadget")  || event.getCurrentItem().getItemMeta().getDisplayName().contains("Game Menu") || event.getCurrentItem().getItemMeta().getDisplayName().contains("Rainbow") || event.getCurrentItem().getItemMeta().getDisplayName().contains("APRIL")){
 						event.setCancelled(true);
 						p.updateInventory();
 				}
@@ -60,6 +61,10 @@ public class InventoryChange {
 			}
 		}
 		}
+		}
+		if (TonyGMenu.inTonyMenu.contains(p.getName())){
+			event.setCancelled(true);
+			TonyGMenu.menuClick(p, event.getRawSlot());
 		}
 	}
 }
