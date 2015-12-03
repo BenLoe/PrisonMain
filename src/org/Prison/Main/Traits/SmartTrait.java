@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 public class SmartTrait {
 
 	public static int getLevel(Player p){
-		if (Files.getDataFile().contains("Players." + p.getName() + ".Smartlvl")){
-			return Files.getDataFile().getInt("Players." + p.getName() + ".Smartlvl");
+		if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Smartlvl")){
+			return Files.getDataFile().getInt("Players." + p.getUniqueId() + ".Smartlvl");
 		}else{
 			return 0;
 		}
@@ -84,8 +84,8 @@ public class SmartTrait {
 	}
 	
 	public static int getSmart(Player p){
-		if (Files.getDataFile().contains("Players." + p.getName() + ".Smart")){
-			return Files.getDataFile().getInt("Players." + p.getName() + ".Smart");
+		if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Smart")){
+			return Files.getDataFile().getInt("Players." + p.getUniqueId() + ".Smart");
 		}else{
 			return 0;
 		}
@@ -96,8 +96,8 @@ public class SmartTrait {
 		if (currentlvl < 15){
 			p.sendMessage("§a§lLevel Up! §eYour intellectual level is now " + (currentlvl + 1));
 			int newlvl = currentlvl + 1;
-			Files.getDataFile().set("Players." + p.getName() + ".Smartlvl", newlvl);
-			Files.getDataFile().set("Players." + p.getName() + ".Smart", 0);
+			Files.getDataFile().set("Players." + p.getUniqueId() + ".Smartlvl", newlvl);
+			Files.getDataFile().set("Players." + p.getUniqueId() + ".Smart", 0);
 			p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 0.8f);
 			Files.saveDataFile();
 			if (newlvl == 15){

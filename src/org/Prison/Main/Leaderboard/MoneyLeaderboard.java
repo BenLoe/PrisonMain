@@ -24,9 +24,9 @@ public class MoneyLeaderboard {
 		TreeMap<String,Integer> sorted = new TreeMap<String,Integer>(comp);
 		for (String s : Files.getDataFile().getStringList("MoneyPlayers")){
 			try {
-				moneys.put(s, (int) Math.round(Economy.getMoney(s)));
+				moneys.put(Files.getDataFile().getString("Players." + s + ".Name"), (int) Math.round(Economy.getMoney(Files.getDataFile().getString("Players." + s + ".Name"))));
 			} catch (UserDoesNotExistException e) {
-				moneys.put(s, 0);
+				moneys.put(Files.getDataFile().getString("Players." + s + ".Name"), 0);
 			}
 		}
 		
@@ -43,7 +43,7 @@ public class MoneyLeaderboard {
 		}
 		for (int i = 0; i <= 9 ; i++){
 			int place = i + 1;
-			Location loc = new Location(Bukkit.getWorld("PrisonMap"), Files.getDataFile().getInt("MoneySign" + place + ".x"), Files.getDataFile().getInt("MoneySign" + place + ".y"), Files.getDataFile().getInt("MoneySign" + place + ".z"));
+			Location loc = new Location(Bukkit.getWorld("PrisonMap"), -184, 60, 230).subtract(i, 0, 0);
 			Sign sign = (Sign) loc.getBlock().getState();
 			String name = leaders.get(i);
 			int money = 0;

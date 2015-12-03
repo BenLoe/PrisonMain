@@ -3,11 +3,13 @@ package org.Prison.Main;
 import me.BenLoe.Gadgets.PurchaseMenus.Purchase;
 import me.BenLoe.Gadgets.Types.RainbowShotgun;
 
+import org.Prison.Main.CorruptEvents.CorruptMenu;
 import org.Prison.Main.Enchanter.ClickHandler;
 import org.Prison.Main.ItemBuyer.ItemBuyerMenu;
 import org.Prison.Main.Menu.MenuItem;
 import org.Prison.Main.Menu.MenuType;
 import org.Prison.Main.Storage.TonyGMenu;
+import org.Prison.Main.Traits.SpeedTrait;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -15,8 +17,9 @@ import org.bukkit.event.inventory.InventoryType.SlotType;
 
 public class InventoryChange {
 
-	public static void Check(InventoryClickEvent event){
+	public void Check(InventoryClickEvent event){
 		Player p = (Player) event.getWhoClicked();
+		SpeedTrait.setCorrectSpeed(p);
 		if (Main.Menu.containsKey(p.getName())){
 			event.setCancelled(true);
 			if (MenuItem.wasAItem(event.getRawSlot(), Main.Menu.get(p.getName()))){
@@ -65,6 +68,12 @@ public class InventoryChange {
 		if (TonyGMenu.inTonyMenu.contains(p.getName())){
 			event.setCancelled(true);
 			TonyGMenu.menuClick(p, event.getRawSlot());
+		}
+		if (CorruptMenu.inMenu.contains(p.getName())){
+			event.setCancelled(true);
+			if (event.getRawSlot() == 13){
+				CorruptMenu.wasClicked(p);
+			}
 		}
 	}
 }

@@ -35,9 +35,17 @@ commands:
   removebooster:
     description: Staff Command
   boostertime:
-    description: Staff Command
+    description: Check how much time is left on the current booster.
   updatelead:
     description: Staff Command
   sc:
-    description: Staff Command                                      
+    description: Staff Command
+  test1:
+    description: Staff Command 
+  test2:
+    description: Staff Command
+  test3:
+    description: Staff Command     
+  givecorrupt:
+    description: Staff Command                                           
                                         

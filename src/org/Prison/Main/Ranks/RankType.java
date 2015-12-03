@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 
 public enum RankType {
 
-	VIP, ADMIN, OWNER, ELITE, MODERATOR, JRMOD, NONE;
+	VIP, ADMIN, OWNER, ELITE, ULTRA, MODERATOR, JRMOD, NONE;
 	
 	
 
@@ -17,6 +17,8 @@ public enum RankType {
 			return RankType.MODERATOR;
 		}else if(p.hasPermission("Rank.JrMod")){
 			return RankType.JRMOD;
+		}else if(p.hasPermission("Rank.Ultra")){
+			return RankType.ULTRA;
 		}else if (p.hasPermission("Rank.Elite")){
 			return RankType.ELITE;
 		}else if(p.hasPermission("Rank.Vip")){
@@ -41,6 +43,9 @@ public enum RankType {
 		}
 		case OWNER:{
 			return "§c§lOWNER";
+		}
+		case ULTRA:{
+			return "§6§lULTRA";
 		}
 		case NONE:{
 			return "NONE";
@@ -68,6 +73,9 @@ public enum RankType {
 		}
 		case OWNER:{
 			return "§c";
+		}
+		case ULTRA:{
+			return "§6";
 		}
 		case NONE:{
 			return "§7";

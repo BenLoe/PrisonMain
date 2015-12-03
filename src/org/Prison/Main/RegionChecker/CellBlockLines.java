@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.Prison.Main.Files;
+import org.Prison.Main.CorruptEvents.GhastTerror;
 import org.Prison.Main.Letter.LetterType;
 import org.PrisonMain.Achievement.Main;
 import org.bukkit.Bukkit;
@@ -29,6 +30,9 @@ public class CellBlockLines {
 			Files.config().set(name + ".y2", loc2.getY());
 			Files.config().set(name + ".z2", loc2.getZ());
 			Files.saveConfig();
+			if (name.equals("Nether")){
+				GhastTerror.copyMap();
+			}
 		}else{
 			p.sendMessage(ChatColor.RED + "Nope");
 		}

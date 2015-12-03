@@ -104,7 +104,7 @@ public class TonyGMenu {
 			if (money >= 200000 && !TonyStorageAPI.hasAccessTo(p, 1)){
 				p.closeInventory();
 				MoneyAPI.removeMoney(p, 200000);
-				Files.getDataFile().set("Players." + p.getName() + ".Chest1", true);
+				Files.getDataFile().set("Players." + p.getUniqueId() + ".Chest1", true);
 				p.sendMessage(ChatColor.GREEN + "Bought access to storage chest 1.");
 				Files.saveDataFile();
 			}
@@ -114,7 +114,7 @@ public class TonyGMenu {
 			if (money >= 400000 && !TonyStorageAPI.hasAccessTo(p, 2)){
 				p.closeInventory();
 				MoneyAPI.removeMoney(p, 400000);
-				Files.getDataFile().set("Players." + p.getName() + ".Chest2", true);
+				Files.getDataFile().set("Players." + p.getUniqueId() + ".Chest2", true);
 				p.sendMessage(ChatColor.GREEN + "Bought access to storage chest 2.");
 				Files.saveDataFile();
 			}
@@ -124,7 +124,7 @@ public class TonyGMenu {
 			if (money >= 600000 && !TonyStorageAPI.hasAccessTo(p, 3)){
 				p.closeInventory();
 				MoneyAPI.removeMoney(p, 600000);
-				Files.getDataFile().set("Players." + p.getName() + ".Chest3", true);
+				Files.getDataFile().set("Players." + p.getUniqueId() + ".Chest3", true);
 				p.sendMessage(ChatColor.GREEN + "Bought access to storage chest 3.");
 				Files.saveDataFile();
 			}
@@ -134,7 +134,7 @@ public class TonyGMenu {
 			if (money >= 1000000 && !TonyStorageAPI.hasAccessTo(p, 4)){
 				p.closeInventory();
 				MoneyAPI.removeMoney(p, 1000000);
-				Files.getDataFile().set("Players." + p.getName() + ".Chest4", true);
+				Files.getDataFile().set("Players." + p.getUniqueId() + ".Chest4", true);
 				p.sendMessage(ChatColor.GREEN + "Bought access to storage chest 4.");
 				Files.saveDataFile();
 			}

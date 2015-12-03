@@ -15,60 +15,57 @@ import org.bukkit.scoreboard.Scoreboard;
 
 public class InfoBoard {
 	
-	
-	@SuppressWarnings("deprecation")
 	public static void setBoardFor(Player p){
 		Scoreboard sc = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective o = sc.registerNewObjective(p.getName(), "dummy");
 		o.setDisplayName("§r  §7§m--§4§l[ The Pit ]§7§m-- ");
 		o.setDisplaySlot(DisplaySlot.SIDEBAR);
-		Score score1 = o.getScore(Bukkit.getServer().getOfflinePlayer("§r"));
+		Score score1 = o.getScore("§r");
 		score1.setScore(16);
-		Score score2 = o.getScore(Bukkit.getServer().getOfflinePlayer("§a§lMoney:"));
+		Score score2 = o.getScore("§a§lMoney:");
 		score2.setScore(15);
-		Score score3 = o.getScore(Bukkit.getServer().getOfflinePlayer("" + MoneyAPI.getMoney(p)));
+		Score score3 = o.getScore("" + MoneyAPI.getMoney(p));
 		score3.setScore(14);
-		Score score4 = o.getScore(Bukkit.getServer().getOfflinePlayer("§r§1"));
+		Score score4 = o.getScore("§r§1");
 		score4.setScore(13);
-		Score score5 = o.getScore(Bukkit.getServer().getOfflinePlayer("§b§lCrystals:"));
+		Score score5 = o.getScore("§b§lCrystals:");
 		score5.setScore(12);
-		Score score6 = o.getScore(Bukkit.getServer().getOfflinePlayer("" + CrystalAPI.getCrystals(p.getName())));
+		Score score6 = o.getScore("" + CrystalAPI.getCrystals(p));
 		score6.setScore(11);
-		Score score7 = o.getScore(Bukkit.getServer().getOfflinePlayer("§r§2"));
+		Score score7 = o.getScore("§r§2");
 		score7.setScore(10);
-		Score score8 = o.getScore(Bukkit.getServer().getOfflinePlayer("§9§lCell Block:"));
+		Score score8 = o.getScore("§9§lCell Block:");
 		score8.setScore(9);
-		Score score9 = o.getScore(Bukkit.getServer().getOfflinePlayer(LetterType.getPlayerLetter(p).name()));
+		Score score9 = o.getScore(LetterType.getPlayerLetter(p).name());
 		score9.setScore(8);
-		Score score10 = o.getScore(Bukkit.getServer().getOfflinePlayer("§r§3"));
+		Score score10 = o.getScore("§r§3");
 		score10.setScore(7);
-		Score score11 = o.getScore(Bukkit.getServer().getOfflinePlayer("§e§lRank:"));
+		Score score11 = o.getScore("§e§lRank:");
 		score11.setScore(6);
-		Score score12 = o.getScore(Bukkit.getServer().getOfflinePlayer(RankType.toNiceName(RankType.getRank(p))));
+		Score score12 = o.getScore(RankType.toNiceName(RankType.getRank(p)));
 		score12.setScore(5);
-		Score score13 = o.getScore(Bukkit.getServer().getOfflinePlayer("§r§4"));
+		Score score13 = o.getScore("§r§4");
 		score13.setScore(4);
 		p.setScoreboard(sc);
 	}
 	
 	public static void update(final Objective o, final Player p, final Score money, final Score crystal, final Score cell, final Score rank){
 		Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), new Runnable(){
-			@SuppressWarnings("deprecation")
 			public void run(){
 				if (p.isOnline()){
 					Files.reloadConfig();				
 					if (!p.getWorld().getName().equals("PVP")){
 						Score money1 = null;
 						Score crystal1 = null;
-						Score cell1 = o.getScore(Bukkit.getServer().getOfflinePlayer(LetterType.getPlayerLetter(p).name()));
-						Score rank1 = o.getScore(Bukkit.getServer().getOfflinePlayer(RankType.toNiceName(RankType.getRank(p))));
+						Score cell1 = o.getScore(LetterType.getPlayerLetter(p).name());
+						Score rank1 = o.getScore(RankType.toNiceName(RankType.getRank(p)));
 					if (Integer.parseInt(money.getEntry()) != MoneyAPI.getMoney(p)){
-					money1 = o.getScore(Bukkit.getServer().getOfflinePlayer("" + MoneyAPI.getMoney(p)));
+					money1 = o.getScore("" + MoneyAPI.getMoney(p));
 				    money1.setScore(14);
 				    p.getScoreboard().resetScores(money.getEntry());
 					}
 					if (Integer.parseInt(crystal.getEntry()) != CrystalAPI.getCrystals(p.getName())){
-					crystal1 = o.getScore(Bukkit.getServer().getOfflinePlayer("" + CrystalAPI.getCrystals(p.getName())));
+					crystal1 = o.getScore("" + CrystalAPI.getCrystals(p.getName()));
 				    crystal1.setScore(11);
 				    p.getScoreboard().resetScores(crystal.getEntry());
 					}

@@ -31,8 +31,8 @@ public class MoneyAPI {
 	@SuppressWarnings("deprecation")
 	public static void setMoney(Player p, int i){
 		List<String> moneys = Files.getDataFile().getStringList("MoneyPlayers");
-		if (!moneys.contains(p.getName())){
-			moneys.add(p.getName());
+		if (!moneys.contains(p.getUniqueId().toString())){
+			moneys.add(p.getUniqueId().toString());
 			Files.getDataFile().set("MoneyPlayers", moneys);
 			Files.saveDataFile();
 		}
@@ -48,8 +48,8 @@ public class MoneyAPI {
 		}
 		newi = getMoney(p);
 			Objective o = p.getScoreboard().getObjective(DisplaySlot.SIDEBAR);	
-			Score oldscore = o.getScore(Bukkit.getOfflinePlayer(old + ""));
-			Score newscore = o.getScore(Bukkit.getOfflinePlayer(newi + ""));
+			Score oldscore = o.getScore(old + "");
+			Score newscore = o.getScore(newi + "");
 			newscore.setScore(14);
 			p.getScoreboard().resetScores(oldscore.getEntry());
 		Files.saveConfig();
@@ -58,8 +58,8 @@ public class MoneyAPI {
 	@SuppressWarnings("deprecation")
 	public static void addMoney(Player p, int i){
 		List<String> moneys = Files.getDataFile().getStringList("MoneyPlayers");
-		if (!moneys.contains(p.getName())){
-			moneys.add(p.getName());
+		if (!moneys.contains(p.getUniqueId().toString())){
+			moneys.add(p.getUniqueId().toString());
 			Files.getDataFile().set("MoneyPlayers", moneys);
 			Files.saveDataFile();
 		}
@@ -75,8 +75,8 @@ public class MoneyAPI {
 		}
 		newi = getMoney(p);
 		Objective o = p.getScoreboard().getObjective(DisplaySlot.SIDEBAR);	
-		Score oldscore = o.getScore(Bukkit.getOfflinePlayer(old + ""));
-		Score newscore = o.getScore(Bukkit.getOfflinePlayer(newi + ""));
+		Score oldscore = o.getScore(old + "");
+		Score newscore = o.getScore(newi + "");
 		newscore.setScore(14);
 		p.getScoreboard().resetScores(oldscore.getEntry());
 		Files.saveConfig();
@@ -85,8 +85,8 @@ public class MoneyAPI {
 	@SuppressWarnings("deprecation")
 	public static void removeMoney(Player p, int i){
 		List<String> moneys = Files.getDataFile().getStringList("MoneyPlayers");
-		if (!moneys.contains(p.getName())){
-			moneys.add(p.getName());
+		if (!moneys.contains(p.getUniqueId().toString())){
+			moneys.add(p.getUniqueId().toString());
 			Files.getDataFile().set("MoneyPlayers", moneys);
 			Files.saveDataFile();
 		}
@@ -102,8 +102,8 @@ public class MoneyAPI {
 		}
 		newi = getMoney(p);
 		Objective o = p.getScoreboard().getObjective(DisplaySlot.SIDEBAR);	
-		Score oldscore = o.getScore(Bukkit.getOfflinePlayer(old + ""));
-		Score newscore = o.getScore(Bukkit.getOfflinePlayer(newi + ""));
+		Score oldscore = o.getScore(old + "");
+		Score newscore = o.getScore(newi + "");
 		newscore.setScore(14);
 		p.getScoreboard().resetScores(oldscore.getEntry());
 		Files.saveConfig();

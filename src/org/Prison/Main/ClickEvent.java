@@ -1,5 +1,10 @@
 package org.Prison.Main;
 
+import me.BenLoe.Gadgets.Types.DeviceType;
+
+import org.Prison.Main.CorruptEvents.CorruptMenu;
+import org.Prison.Main.CorruptEvents.DropKey;
+import org.Prison.Main.Letter.LetterType;
 import org.Prison.Main.Menu.MainMenu;
 import org.Prison.Main.Ranks.RankType;
 import org.Prison.Main.RegionChecker.CellBlockLines;
@@ -24,6 +29,21 @@ public class ClickEvent {
 		Player p = event.getPlayer();
 		SignClickManager.clickHandler(event);
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+			if (DropKey.particle.contains(event.getClickedBlock().getLocation())){
+				event.setCancelled(true);
+				p.sendMessage("§b§lYou received 1 Corrupt Key.");
+				for (Player p1 : Bukkit.getOnlinePlayers()){
+					if (p1.getWorld().getName().equals("NetherMap") && p1.getName() != p.getName()){
+						p1.sendMessage("§a" + p.getName() + " §bgot to the corrupt key first.");
+					}
+				}
+				p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 1f);
+				DeviceType.KEY.addAmount(1, p);
+				event.getClickedBlock().setType(Material.AIR);
+				ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(Material.CHEST, (byte) 0), 0.3f,0.3f, 0.3f, 0.3f, 100, event.getClickedBlock().getLocation(), 100);
+				DropKey.particle.remove(event.getClickedBlock().getLocation());
+				return;
+			}
 		if (CellBlockLines.ifPlayerIsIn(p.getLocation(), "Visible")){
 		if (event.getClickedBlock().getType().equals(Material.CHEST)){	
 			event.setCancelled(true);
@@ -83,6 +103,19 @@ public class ClickEvent {
 					}, 50l);
 					Main.wood.put(p.getName(), 1);
 					Main.woodBlock.put(p.getName(), event.getClickedBlock());
+				}
+			}
+		}
+		if (event.getItem() != null){
+			if (event.getItem().hasItemMeta() && event.getItem().getItemMeta().hasDisplayName()){
+				if (event.getItem().getItemMeta().getDisplayName().contains("§4§l Corrupt Shard")){
+					if (LetterType.getPlayerLetter(p).getInt() > 12){
+						p.getInventory().setItem(p.getInventory().getHeldItemSlot(), null);
+						p.updateInventory();
+						CorruptMenu.teleport(p);
+					}else{
+						p.sendMessage("§cYou are not experienced enough to use this.");
+					}
 				}
 			}
 		}

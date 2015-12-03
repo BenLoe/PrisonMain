@@ -81,7 +81,7 @@ public class Tutorial {
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fTutorial");
 					p.sendMessage(" §fHey there this is a quick tutorial to");
-					p.sendMessage(" §fexplain all the different aspects of our");
+					p.sendMessage(" §fexplain all the general aspects of our");
 					p.sendMessage(" §fserver.");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
@@ -90,7 +90,7 @@ public class Tutorial {
 				case 6:{
 					p.sendMessage("§a§l>§fTutorial");
 					p.sendMessage(" §fHey there this is a quick tutorial to");
-					p.sendMessage(" §fexplain all the different aspects of our");
+					p.sendMessage(" §fexplain all the general aspects of our");
 					p.sendMessage(" §fserver.");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
@@ -99,7 +99,7 @@ public class Tutorial {
 				case 7:{
 					p.sendMessage("§a§l>§fTutorial");
 					p.sendMessage(" §fHey there this is a quick tutorial to");
-					p.sendMessage(" §fexplain all the different aspects of our");
+					p.sendMessage(" §fexplain all the general aspects of our");
 					p.sendMessage(" §fserver.");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
@@ -108,7 +108,7 @@ public class Tutorial {
 				case 8:{
 					p.sendMessage("§a§l>§fTutorial");
 					p.sendMessage(" §fHey there this is a quick tutorial to");
-					p.sendMessage(" §fexplain all the different aspects of our");
+					p.sendMessage(" §fexplain all the general aspects of our");
 					p.sendMessage(" §fserver.");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
@@ -141,7 +141,7 @@ public class Tutorial {
 					p.sendMessage(" §fsmall chance of finding a ancient pickaxe.");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp identify");
 				}
 				break;
 				case 12:{
@@ -150,7 +150,7 @@ public class Tutorial {
 					p.sendMessage(" §fsmall chance of finding a ancient pickaxe.");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp identify");
 				}
 				break;
 				case 13:{
@@ -159,7 +159,7 @@ public class Tutorial {
 					p.sendMessage(" §fsmall chance of finding a ancient pickaxe.");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp identify");
 				}
 				break;
 				case 14:{
@@ -168,7 +168,7 @@ public class Tutorial {
 					p.sendMessage(" §fsmall chance of finding a ancient pickaxe.");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp identify");
 				}
 				break;
 				case 15:{
@@ -179,7 +179,7 @@ public class Tutorial {
 					p.sendMessage(" §fhe will identify what kind of pickaxe it is,");
 					p.sendMessage(" §fand what stats it has.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp identify");
 				}
 				break;
 				case 16:{
@@ -188,7 +188,7 @@ public class Tutorial {
 					p.sendMessage(" §fhe will identify what kind of pickaxe it is,");
 					p.sendMessage(" §fand what stats it has.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp identify");
 				}
 				break;
 				case 17:{
@@ -197,7 +197,7 @@ public class Tutorial {
 					p.sendMessage(" §fhe will identify what kind of pickaxe it is,");
 					p.sendMessage(" §fand what stats it has.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp identify");
 				}
 				break;
 				case 18:{
@@ -206,7 +206,7 @@ public class Tutorial {
 					p.sendMessage(" §fhe will identify what kind of pickaxe it is,");
 					p.sendMessage(" §fand what stats it has.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");	
+					p.sendMessage(" §b/warp identify");	
 				}
 				break;
 				case 19:{
@@ -215,7 +215,7 @@ public class Tutorial {
 					p.sendMessage(" §fhe will identify what kind of pickaxe it is,");
 					p.sendMessage(" §fand what stats it has.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");	
+					p.sendMessage(" §b/warp identify");	
 				}
 				break;
 				case 20:{
@@ -224,7 +224,7 @@ public class Tutorial {
 					p.sendMessage(" §fhe will identify what kind of pickaxe it is,");
 					p.sendMessage(" §fand what stats it has.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp identify");
 				}
 				break;
 				case 21:{
@@ -276,6 +276,33 @@ public class Tutorial {
 				}
 				break;
 				case 26:{
+					p.sendMessage("§a§l>§fEnchanter");
+					p.sendMessage(" §fSome pickaxes will allow you to enchant them.");
+					p.sendMessage(" §fGive them to the enchanter to get them enchanted.");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+				}
+				break;
+				case 27:{
+					p.sendMessage("§a§l>§fEnchanter");
+					p.sendMessage(" §fSome pickaxes will allow you to enchant them.");
+					p.sendMessage(" §fGive them to the enchanter to get them enchanted.");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+				}
+				break;
+				case 28:{
+					p.sendMessage("§a§l>§fEnchanter");
+					p.sendMessage(" §fSome pickaxes will allow you to enchant them.");
+					p.sendMessage(" §fGive them to the enchanter to get them enchanted.");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+				}
+				break;
+				case 29:{
 					p.teleport(Main.getLocation("Tutorial5").add(0.5, 0, 0.5));
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fSelling Items");
@@ -286,7 +313,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 				}
 				break;
-				case 27:
+				case 30:
 					p.sendMessage("§a§l>§fSelling Items");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
@@ -294,49 +321,33 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 				break;
-				case 28:
-					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
-					p.sendMessage("§a§l>§fSelling Items");
-					p.sendMessage(" §fEvery mine has some item buyers, give them");
-					p.sendMessage(" §fthe items you want to sell.");
-					p.sendMessage("   ");
-					p.sendMessage("   ");
-					p.sendMessage("   ");
-					break;
-				case 29:
-					p.sendMessage("§a§l>§fSelling Items");
-					p.sendMessage(" §fEvery mine has some item buyers, give them");
-					p.sendMessage(" §fthe items you want to sell.");
-					p.sendMessage("   ");
-					p.sendMessage("   ");
-					p.sendMessage("   ");
-					break;
-				case 30:
-					p.sendMessage("§a§l>§fSelling Items");
-					p.sendMessage(" §fEvery mine has some item buyers, give them");
-					p.sendMessage(" §fthe items you want to sell.");
-					p.sendMessage("   ");
-					p.sendMessage("   ");
-					p.sendMessage("   ");
-					break;
 				case 31:
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fSelling Items");
 					p.sendMessage(" §fEvery mine has some item buyers, give them");
 					p.sendMessage(" §fthe items you want to sell.");
-					p.sendMessage(" §fThey will buy the items for an appropriate");
-					p.sendMessage(" §fprice.");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
 				case 32:
 					p.sendMessage("§a§l>§fSelling Items");
 					p.sendMessage(" §fEvery mine has some item buyers, give them");
 					p.sendMessage(" §fthe items you want to sell.");
-					p.sendMessage(" §fThey will buy the items for an appropriate");
-					p.sendMessage(" §fprice.");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
 				case 33:
+					p.sendMessage("§a§l>§fSelling Items");
+					p.sendMessage(" §fEvery mine has some item buyers, give them");
+					p.sendMessage(" §fthe items you want to sell.");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					break;
+				case 34:
+					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fSelling Items");
 					p.sendMessage(" §fEvery mine has some item buyers, give them");
 					p.sendMessage(" §fthe items you want to sell.");
@@ -344,7 +355,39 @@ public class Tutorial {
 					p.sendMessage(" §fprice.");
 					p.sendMessage("   ");
 					break;
-				case 34:
+				case 35:
+					p.sendMessage("§a§l>§fSelling Items");
+					p.sendMessage(" §fEvery mine has some item buyers, give them");
+					p.sendMessage(" §fthe items you want to sell.");
+					p.sendMessage(" §fThey will buy the items for an appropriate");
+					p.sendMessage(" §fprice.");
+					p.sendMessage("   ");
+					break;
+				case 36:
+					p.sendMessage("§a§l>§fSelling Items");
+					p.sendMessage(" §fEvery mine has some item buyers, give them");
+					p.sendMessage(" §fthe items you want to sell.");
+					p.sendMessage(" §fThey will buy the items for an appropriate");
+					p.sendMessage(" §fprice.");
+					p.sendMessage("   ");
+					break;
+				case 37:
+					p.sendMessage("§a§l>§fSelling Items");
+					p.sendMessage(" §fEvery mine has some item buyers, give them");
+					p.sendMessage(" §fthe items you want to sell.");
+					p.sendMessage(" §fThey will buy the items for an appropriate");
+					p.sendMessage(" §fprice.");
+					p.sendMessage("   ");
+					break;
+				case 38:
+					p.sendMessage("§a§l>§fSelling Items");
+					p.sendMessage(" §fEvery mine has some item buyers, give them");
+					p.sendMessage(" §fthe items you want to sell.");
+					p.sendMessage(" §fThey will buy the items for an appropriate");
+					p.sendMessage(" §fprice.");
+					p.sendMessage("   ");
+					break;
+				case 39:
 					p.teleport(Main.getLocation("Tutorial6").add(0.5, 0, 0.5));
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fCell Block");
@@ -354,7 +397,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 35:
+				case 40:
 					p.sendMessage("§a§l>§fCell Block");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
@@ -362,32 +405,40 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 36:
+				case 41:
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fCell Block");
 					p.sendMessage(" §fThat cell block back there is yours.");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp cell");
 					break;
-				case 37:
+				case 42:
 					p.sendMessage("§a§l>§fCell Block");
 					p.sendMessage(" §fThat cell block back there is yours.");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp cell");
 					break;
-				case 38:
+				case 43:
 					p.sendMessage("§a§l>§fCell Block");
 					p.sendMessage(" §fThat cell block back there is yours.");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp cell");
 					break;
-				case 39:
+				case 44:
+					p.sendMessage("§a§l>§fCell Block");
+					p.sendMessage(" §fThat cell block back there is yours.");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage(" §b/warp cell");
+					break;
+				case 45:
 					p.teleport(Main.getLocation("Tutorial7").add(0.5, 0, 0.5));
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fCell Block");
@@ -395,33 +446,57 @@ public class Tutorial {
 					p.sendMessage(" §fYou can store items in your enderchest, and");
 					p.sendMessage(" §fif your a donator, you can use that chest.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp cell");
 					break;
-				case 40:
+				case 46:
 					p.sendMessage("§a§l>§fCell Block");
 					p.sendMessage(" §fThat cell block back there is yours.");
 					p.sendMessage(" §fYou can store items in your enderchest, and");
 					p.sendMessage(" §fif your a donator, you can use that chest.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp cell");
 					break;
-				case 41:
+				case 47:
 					p.sendMessage("§a§l>§fCell Block");
 					p.sendMessage(" §fThat cell block back there is yours.");
 					p.sendMessage(" §fYou can store items in your enderchest, and");
 					p.sendMessage(" §fif your a donator, you can use that chest.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp cell");
 					break;
-				case 42:
+				case 48:
 					p.sendMessage("§a§l>§fCell Block");
 					p.sendMessage(" §fThat cell block back there is yours.");
 					p.sendMessage(" §fYou can store items in your enderchest, and");
 					p.sendMessage(" §fif your a donator, you can use that chest.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp cell");
 					break;
-				case 43:
+				case 49:
+					p.sendMessage("§a§l>§fCell Block");
+					p.sendMessage(" §fThat cell block back there is yours.");
+					p.sendMessage(" §fYou can store items in your enderchest, and");
+					p.sendMessage(" §fif your a donator, you can use that chest.");
+					p.sendMessage("   ");
+					p.sendMessage(" §b/warp cell");
+					break;
+				case 50:
+					p.sendMessage("§a§l>§fCell Block");
+					p.sendMessage(" §fThat cell block back there is yours.");
+					p.sendMessage(" §fYou can store items in your enderchest, and");
+					p.sendMessage(" §fif your a donator, you can use that chest.");
+					p.sendMessage("   ");
+					p.sendMessage(" §b/warp cell");
+					break;
+				case 51:
+					p.sendMessage("§a§l>§fCell Block");
+					p.sendMessage(" §fThat cell block back there is yours.");
+					p.sendMessage(" §fYou can store items in your enderchest, and");
+					p.sendMessage(" §fif your a donator, you can use that chest.");
+					p.sendMessage("   ");
+					p.sendMessage(" §b/warp cell");
+					break;
+				case 52:
 					p.teleport(Main.getLocation("Tutorial8").add(0.5, 0, 0.5));
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fRanking Up");
@@ -431,7 +506,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 44:
+				case 53:
 					p.sendMessage("§a§l>§fRanking Up");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
@@ -439,7 +514,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 45:
+				case 54:
 					p.sendMessage("§a§l>§fRanking Up");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
@@ -447,48 +522,56 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 46:
+				case 55:
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fRanking Up");
 					p.sendMessage(" §fBack there is a corrupt cop,");
 					p.sendMessage(" §fgive him enough money and he'll rank you");
 					p.sendMessage(" §fup.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp rankup");
 					break;
-				case 47:
+				case 56:
 					p.sendMessage("§a§l>§fRanking Up");
 					p.sendMessage(" §fBack there is a corrupt cop,");
 					p.sendMessage(" §fgive him enough money and he'll rank you");
 					p.sendMessage(" §fup.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp rankup");
 					break;
-				case 48:
+				case 57:
 					p.sendMessage("§a§l>§fRanking Up");
 					p.sendMessage(" §fBack there is a corrupt cop,");
 					p.sendMessage(" §fgive him enough money and he'll rank you");
 					p.sendMessage(" §fup.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp rankup");
 					break;
-				case 49:
+				case 58:
 					p.sendMessage("§a§l>§fRanking Up");
 					p.sendMessage(" §fBack there is a corrupt cop,");
 					p.sendMessage(" §fgive him enough money and he'll rank you");
 					p.sendMessage(" §fup.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp rankup");
 					break;
-				case 50:
+				case 59:
 					p.sendMessage("§a§l>§fRanking Up");
 					p.sendMessage(" §fBack there is a corrupt cop,");
 					p.sendMessage(" §fgive him enough money and he'll rank you");
 					p.sendMessage(" §fup.");
 					p.sendMessage("   ");
-					p.sendMessage("   ");
+					p.sendMessage(" §b/warp rankup");
 					break;
-				case 51:
+				case 60:
+					p.sendMessage("§a§l>§fRanking Up");
+					p.sendMessage(" §fBack there is a corrupt cop,");
+					p.sendMessage(" §fgive him enough money and he'll rank you");
+					p.sendMessage(" §fup.");
+					p.sendMessage("   ");
+					p.sendMessage(" §b/warp rankup");
+					break;
+				case 61:
 					p.teleport(Main.getLocation("Tutorial9").add(0.5, 0, 0.5));
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fSpeed Trait");
@@ -498,7 +581,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 52:
+				case 62:
 					p.sendMessage("§a§l>§fSpeed Trait");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
@@ -506,7 +589,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 53:
+				case 63:
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fSpeed Trait");
 					p.sendMessage(" §fYour speed level changes how fast you are.");
@@ -515,7 +598,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 54:
+				case 64:
 					p.sendMessage("§a§l>§fSpeed Trait");
 					p.sendMessage(" §fYour speed level changes how fast you are.");
 					p.sendMessage("   ");
@@ -523,7 +606,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 55:
+				case 65:
 					p.sendMessage("§a§l>§fSpeed Trait");
 					p.sendMessage(" §fYour speed level changes how fast you are.");
 					p.sendMessage("   ");
@@ -531,7 +614,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 56:
+				case 66:
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fSpeed Trait");
 					p.sendMessage(" §fYour speed level changes how fast you are.");
@@ -540,7 +623,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 57:
+				case 67:
 					p.sendMessage("§a§l>§fSpeed Trait");
 					p.sendMessage(" §fYour speed level changes how fast you are.");
 					p.sendMessage(" §fTo level up, just simply walk around, the");
@@ -548,7 +631,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 58:
+				case 68:
 					p.sendMessage("§a§l>§fSpeed Trait");
 					p.sendMessage(" §fYour speed level changes how fast you are.");
 					p.sendMessage(" §fTo level up, just simply walk around, the");
@@ -556,7 +639,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 59:
+				case 69:
 					p.sendMessage("§a§l>§fSpeed Trait");
 					p.sendMessage(" §fYour speed level changes how fast you are.");
 					p.sendMessage(" §fTo level up, just simply walk around, the");
@@ -564,7 +647,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 60:
+				case 70:
 					p.sendMessage("§a§l>§fSpeed Trait");
 					p.sendMessage(" §fYour speed level changes how fast you are.");
 					p.sendMessage(" §fTo level up, just simply walk around, the");
@@ -572,7 +655,15 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 61:
+				case 71:
+					p.sendMessage("§a§l>§fSpeed Trait");
+					p.sendMessage(" §fYour speed level changes how fast you are.");
+					p.sendMessage(" §fTo level up, just simply walk around, the");
+					p.sendMessage(" §fmore you walk, the faster you level up.");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					break;
+				case 72:
 					p.teleport(Main.getLocation("Tutorial10").add(0.5, 0, 0.5));
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fIntellect Trait");
@@ -582,7 +673,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 62:
+				case 73:
 					p.sendMessage("§a§l>§fIntellect Trait");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
@@ -590,7 +681,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 63:
+				case 74:
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fIntellect Trait");
 					p.sendMessage(" §fYour intellect level changes the chance of");
@@ -599,7 +690,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 64:
+				case 75:
 					p.sendMessage("§a§l>§fIntellect Trait");
 					p.sendMessage(" §fYour intellect level changes the chance of");
 					p.sendMessage(" §fgetting a good pickaxe when identifying.");
@@ -607,7 +698,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 65:
+				case 76:
 					p.sendMessage("§a§l>§fIntellect Trait");
 					p.sendMessage(" §fYour intellect level changes the chance of");
 					p.sendMessage(" §fgetting a good pickaxe when identifying.");
@@ -615,7 +706,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 66:
+				case 77:
 					p.sendMessage("§a§l>§fIntellect Trait");
 					p.sendMessage(" §fYour intellect level changes the chance of");
 					p.sendMessage(" §fgetting a good pickaxe when identifying.");
@@ -623,7 +714,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 67:
+				case 78:
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fIntellect Trait");
 					p.sendMessage(" §fYour intellect level changes the chance of");
@@ -632,7 +723,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 68:
+				case 79:
 					p.sendMessage("§a§l>§fIntellect Trait");
 					p.sendMessage(" §fYour intellect level changes the chance of");
 					p.sendMessage(" §fgetting a good pickaxe when identifying.");
@@ -640,7 +731,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 69:
+				case 80:
 					p.sendMessage("§a§l>§fIntellect Trait");
 					p.sendMessage(" §fYour intellect level changes the chance of");
 					p.sendMessage(" §fgetting a good pickaxe when identifying.");
@@ -648,7 +739,107 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 70:
+				case 81:
+					p.teleport(Main.getLocation("Tutorial12").add(0.5, 0, 0.5));
+					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
+					p.sendMessage("§a§l>§fBlackmarket");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					break;
+				case 82:
+					p.sendMessage("§a§l>§fBlackmarket");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					break;
+				case 83:
+					p.sendMessage("§a§l>§fBlackmarket");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					break;
+				case 84:
+					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
+					p.sendMessage("§a§l>§fBlackmarket");
+					p.sendMessage(" §fThe blackmarket is the place where you");
+					p.sendMessage(" §fcan repair and smelt your pickaxes.");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					break;
+				case 85:
+					p.sendMessage("§a§l>§fBlackmarket");
+					p.sendMessage(" §fThe blackmarket is the place where you");
+					p.sendMessage(" §fcan repair and smelt your pickaxes.");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					break;
+				case 86:
+					p.sendMessage("§a§l>§fBlackmarket");
+					p.sendMessage(" §fThe blackmarket is the place where you");
+					p.sendMessage(" §fcan repair and smelt your pickaxes.");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					break;
+				case 87:
+					p.sendMessage("§a§l>§fBlackmarket");
+					p.sendMessage(" §fThe blackmarket is the place where you");
+					p.sendMessage(" §fcan repair and smelt your pickaxes.");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					p.sendMessage("   ");
+					break;
+				case 88:
+					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
+					p.sendMessage("§a§l>§fBlackmarket");
+					p.sendMessage(" §fThe blackmarket is the place where you");
+					p.sendMessage(" §fcan repair and smelt your pickaxes.");
+					p.sendMessage(" §fSmelting your pickaxes gives you");
+					p.sendMessage(" §fpickaxe shards, used to repair pickaxes.");
+					p.sendMessage("   ");
+					break;
+				case 89:
+					p.sendMessage("§a§l>§fBlackmarket");
+					p.sendMessage(" §fThe blackmarket is the place where you");
+					p.sendMessage(" §fcan repair and smelt your pickaxes.");
+					p.sendMessage(" §fSmelting your pickaxes gives you");
+					p.sendMessage(" §fpickaxe shards, used to repair pickaxes.");
+					p.sendMessage("   ");
+					break;
+				case 90:
+					p.sendMessage("§a§l>§fBlackmarket");
+					p.sendMessage(" §fThe blackmarket is the place where you");
+					p.sendMessage(" §fcan repair and smelt your pickaxes.");
+					p.sendMessage(" §fSmelting your pickaxes gives you");
+					p.sendMessage(" §fpickaxe shards, used to repair pickaxes.");
+					p.sendMessage("   ");
+					break;
+				case 91:
+					p.sendMessage("§a§l>§fBlackmarket");
+					p.sendMessage(" §fThe blackmarket is the place where you");
+					p.sendMessage(" §fcan repair and smelt your pickaxes.");
+					p.sendMessage(" §fSmelting your pickaxes gives you");
+					p.sendMessage(" §fpickaxe shards, used to repair pickaxes.");
+					p.sendMessage("   ");
+					break;
+				case 92:
+					p.sendMessage("§a§l>§fBlackmarket");
+					p.sendMessage(" §fThe blackmarket is the place where you");
+					p.sendMessage(" §fcan repair and smelt your pickaxes.");
+					p.sendMessage(" §fSmelting your pickaxes gives you");
+					p.sendMessage(" §fpickaxe shards, used to repair pickaxes.");
+					p.sendMessage("   ");
+					break;
+				case 93:
 					p.teleport(Main.getLocation("Tutorial11").add(0.5, 0, 0.5));
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fEnd of Tutorial");
@@ -658,7 +849,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 71:
+				case 94:
 					p.sendMessage("§a§l>§fEnd of Tutorial");
 					p.sendMessage("   ");
 					p.sendMessage("   ");
@@ -666,7 +857,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 72:
+				case 95:
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fEnd of Tutorial");
 					p.sendMessage(" §fThats pretty much it, go on and have");
@@ -675,7 +866,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 73:
+				case 96:
 					p.sendMessage("§a§l>§fEnd of Tutorial");
 					p.sendMessage(" §fThats pretty much it, go on and have");
 					p.sendMessage(" §ffun.");
@@ -683,7 +874,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 74:
+				case 97:
 					p.sendMessage("§a§l>§fEnd of Tutorial");
 					p.sendMessage(" §fThats pretty much it, go on and have");
 					p.sendMessage(" §ffun.");
@@ -691,7 +882,7 @@ public class Tutorial {
 					p.sendMessage("   ");
 					p.sendMessage("   ");
 					break;
-				case 75:
+				case 98:
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 					p.sendMessage("§a§l>§fEnd of Tutorial");
 					p.sendMessage(" §fThats pretty much it, go on and have");
@@ -700,7 +891,7 @@ public class Tutorial {
 					p.sendMessage(" §fthe staff.");
 					p.sendMessage("   ");
 					break;
-				case 76:
+				case 99:
 					p.sendMessage("§a§l>§fEnd of Tutorial");
 					p.sendMessage(" §fThats pretty much it, go on and have");
 					p.sendMessage(" §ffun.");
@@ -708,7 +899,7 @@ public class Tutorial {
 					p.sendMessage(" §fthe staff.");
 					p.sendMessage("   ");
 					break;
-				case 77:
+				case 100:
 					p.sendMessage("§a§l>§fEnd of Tutorial");
 					p.sendMessage(" §fThats pretty much it, go on and have");
 					p.sendMessage(" §ffun.");
@@ -716,7 +907,7 @@ public class Tutorial {
 					p.sendMessage(" §fthe staff.");
 					p.sendMessage("   ");
 					break;
-				case 78:
+				case 101:
 					p.sendMessage("§a§l>§fEnd of Tutorial");
 					p.sendMessage(" §fThats pretty much it, go on and have");
 					p.sendMessage(" §ffun.");
@@ -724,7 +915,7 @@ public class Tutorial {
 					p.sendMessage(" §fthe staff.");
 					p.sendMessage("   ");
 					break;
-				case 79:
+				case 102:
 					p.sendMessage("§a§l>§fEnd of Tutorial");
 					p.sendMessage(" §fThats pretty much it, go on and have");
 					p.sendMessage(" §ffun.");
@@ -734,6 +925,7 @@ public class Tutorial {
 					p.teleport(Main.getLocation("spawn").add(0.5, 0, 0.5));
 					Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), new Runnable(){
 						public void run(){
+							p.sendMessage("§bYou can move now.");
 							AchievementAPI.completeAchievement(p, AchievementMenu.READING_THE_MANUAL);
 						}
 					}, 20l);
@@ -743,7 +935,7 @@ public class Tutorial {
 				p.sendMessage("§b§l§m---------------" + "§7§o/exit to leave" + "§b§l§m---------------");
 				int newi = i + 1;
 				Main.Tutorialint.remove(p.getName());
-				if (newi != 80){
+				if (newi != 103){
 					Main.Tutorialint.put(p.getName(), newi);
 				}
 			}

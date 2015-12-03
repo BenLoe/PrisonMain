@@ -1,6 +1,8 @@
 package org.Prison.Main.Letter;
 
 import me.BenLoe.Blackmarket.Stats.Stats;
+import me.BenLoe.quest.ActiveQuest;
+import me.BenLoe.quest.QuestAPI;
 
 import org.Prison.Main.Files;
 import org.Prison.Main.Currency.MoneyAPI;
@@ -45,68 +47,88 @@ public enum LetterType {
 	public NeededType getNeeded(){
 		switch(this.name){
 		case "B":{
-			return new NeededType(7500, 0, 0, 0, this);
+			return new NeededType(7500, 0, 0, this);
 		}
 		case "C":{
-			return new NeededType(17000, 0, 0, 0, this);
+			return new NeededType(17000, 0, 0, this);
 		}
 		case "D":{
-			return new NeededType(40000, 0, 0, 0, this);
+			return new NeededType(40000, 0, 0, this);
 		}
 		case "E":{
-			return new NeededType(80000, 0, 0, 0, this);
+			return new NeededType(80000, 0, 0, this);
 		}
 		case "F":{
-			return new NeededType(120000, 0, 0, 0, this);
+			return new NeededType(120000, 0, 0, this);
 		}
 		case "G":{
-			return new NeededType(150000, 0, 0, 0, this);
+			return new NeededType(150000, 0, 0, this);
 		}
 		case "H":{
-			return new NeededType(190000, 0, 0, 0, this);
+			return new NeededType(190000, 0, 0, this);
 		}
 		case "I":{
-			return new NeededType(250000, 0, 0, 0, this);
+			return new NeededType(250000, 0, 0, this);
 		}
 		case "J":{
-			return new NeededType(400000, 0, 0, 0, this);
+			return new NeededType(400000, 0, 0, this);
 		}
 		case "K":{
-			return new NeededType(700000, 0, 0, 0, this);
+			return new NeededType(700000, 0, 0, this);
 		}
 		case "L":{
-			return new NeededType(800000, 0, 0, 0, this);
+			return new NeededType(800000, 0, 0, this);
 		}
 		case "M":{
-			return new NeededType(1300000, 50, 0, 0, this);
+			return new NeededType(1300000, 65, 0, this);
 		}
 		case "N":{
-			return new NeededType(2000000, 90, 0, 0, this);
+			return new NeededType(2000000, 100, 0, this);
 		}
 		case "O":{
-			return new NeededType(2800000, 150, 0, 0, this);
+			return new NeededType(2800000, 160, 0, this);
 		}
 		case "P":{
-			return new NeededType(3200000, 190, 4, 0, this);
+			return new NeededType(3200000, 200, 6, this);
 		}
 		case "Q":{
-			return new NeededType(4000000, 200, 6, 0, this);
+			return new NeededType(4000000, 220, 10, this);
 		}
 		case "R":{
-			return new NeededType(5000000, 260, 10, 0, this);
+			return new NeededType(5000000, 260, 13, this);
+		}
+		case "S":{
+			return new NeededType(8000000, 300, 20, this);
+		}
+		case "T":{
+			return new NeededType(10000000, 340, 24, this);
+		}
+		case "U":{
+			return new NeededType(11000000, 355, 28, this);
+		}
+		case "V":{
+			return new NeededType(13000000, 365, 30, this);
+		}
+		case "W":{
+			return new NeededType(15000000, 380, 34, this);
+		}
+		case "X":{
+			return new NeededType(19000000, 395, 37, this);
+		}
+		case "Y":{
+			return new NeededType(21000000, 420, 40, this);
+		}
+		case "Z":{
+			return new NeededType(30000000, 500, 43, this);
 		}
 		}
-		return new NeededType(1000000, 10000, 10000, 0, this);
+		return new NeededType(1000000000, 1000000000, 1000000000, this);
 	}
-	@SuppressWarnings("deprecation")
 	public static void attemptRankup(Player p){
 		LetterType t = getPlayerLetter(p);
 		if (t.i == 26){
 			p.sendMessage("§e[§bCorrupt Guard§e]: §aSeems like you are already in the max cell block!");
 		}else{
-			if (t.i == 18){
-				p.sendMessage("§e[§bCorrupt Guard§e]: §aUh oh.... your faster then the owners.. that cell block isn't made yet... ABORT!");
-			}else{
 			LetterType next = LetterType.A;
 			for (LetterType l : values()){
 				if (l.i == t.i + 1){
@@ -114,26 +136,35 @@ public enum LetterType {
 					break;
 				}
 			}
+			if (t.i == 21){
+				p.sendMessage("§e[§bCorrupt Guard§e]: §aLooks like your faster then the owners... That cell block isn't created yet.");
+				return;
+			}
 			if (next.getNeeded().attemptFor(p)){
 				Objective o = p.getScoreboard().getObjective(DisplaySlot.SIDEBAR);	
-				Score oldscore = o.getScore(Bukkit.getOfflinePlayer(t.name));
-				Score newscore = o.getScore(Bukkit.getOfflinePlayer(next.name));
+				Score oldscore = o.getScore(t.name);
+				Score newscore = o.getScore(next.name);
 				newscore.setScore(8);
 				p.getScoreboard().resetScores(oldscore.getEntry());
 				rankUp(p);
 				p.sendMessage("§e[§bCorrupt Guard§e]: §aI see you have enough money to rankup! Let's get you moved to " + LetterType.getColoredString(next) + " §ablock.");
 				MoneyAPI.removeMoney(p, next.getNeeded().getMoney());
 				Stats.getStats(p.getName()).removeShards(next.getNeeded().getShards());
-				Stats.getStats(p.getName()).removeEnchantedShards(next.getNeeded().getEShards());
-			}
+				QuestAPI.removeFavor(p, next.getNeeded().getFavor());
+				if (QuestAPI.hasAActive(p)){
+					ActiveQuest aq = ActiveQuest.getActive(p);
+					if (aq.getNeededType() == me.BenLoe.quest.NeededType.RANKUP){
+						QuestAPI.addProgress(p, 1);
+					}
+				}
 			}
 		}
 	}
 	public static LetterType getPlayerLetter(Player p){
-		if (Files.getDataFile().contains("Players." + p.getName() + ".Letter")){
-			return fromString(Files.getDataFile().getString("Players." + p.getName() + ".Letter"));
+		if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Letter")){
+			return fromString(Files.getDataFile().getString("Players." + p.getUniqueId() + ".Letter"));
 		}else{
-			Files.getDataFile().set("Players." + p.getName() + ".Letter", "A");
+			Files.getDataFile().set("Players." + p.getUniqueId() + ".Letter", "A");
 			return LetterType.A;
 		}
 	}
@@ -213,10 +244,10 @@ public enum LetterType {
 			return "§0§lX";
 		}
 		case Y:{
-			return "§a§k|§0§lY§a§k|";
+			return "§a§k|§8§lY§a§k|";
 		}
 		case Z:{
-			return "§a§k|§0§lZ§a§k|";
+			return "§a§k|§8§lZ§a§k|";
 		}
 		}
 		return null;
@@ -230,7 +261,7 @@ public enum LetterType {
 		}
 		for (LetterType t : values()){
 			if (t.i == rank + 1){
-				Files.getDataFile().set("Players." + p.getName() + ".Letter", t.name);
+				Files.getDataFile().set("Players." + p.getUniqueId() + ".Letter", t.name);
 				Files.saveDataFile();
 			}
 		}

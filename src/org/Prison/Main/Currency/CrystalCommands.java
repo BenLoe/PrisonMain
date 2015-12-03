@@ -1,6 +1,9 @@
 package org.Prison.Main.Currency;
 
+import java.util.UUID;
+
 import org.Prison.Main.Files;
+import org.Prison.Main.UUIDFetcher;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -126,7 +129,8 @@ public class CrystalCommands {
 		}
 	
 	public static boolean ifPlayerExists(String p){
-		if (Files.getDataFile().contains("Players." + p)){
+		UUID uuid = new UUIDFetcher(p).callForOne();
+		if (Files.getDataFile().contains("Players." + uuid)){
 			return true;
 		}
 		return false;

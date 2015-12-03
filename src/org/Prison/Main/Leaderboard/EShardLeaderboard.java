@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import me.BenLoe.Blackmarket.Stats.Stats;
+import me.BenLoe.quest.QuestAPI;
 
 import org.Prison.Main.Files;
 import org.bukkit.Bukkit;
@@ -24,7 +25,8 @@ public class EShardLeaderboard {
 		CompareValues comp = new CompareValues(moneys);
 		TreeMap<String,Integer> sorted = new TreeMap<String,Integer>(comp);
 		for (String s : Files.getDataFile().getStringList("MoneyPlayers")){
-			moneys.put(s, Stats.getStats(s).getEnchantedShards());
+			
+			moneys.put(s, QuestAPI.getFavor(s));
 		}
 		
 		sorted.putAll(moneys);
@@ -39,14 +41,15 @@ public class EShardLeaderboard {
 		}
 		for (int i = 0; i <= 9 ; i++){
 			int place = i + 1;
-			Location loc = new Location(Bukkit.getWorld("PrisonMap"), Files.getDataFile().getInt("MoneySign" + place + ".x"), Files.getDataFile().getInt("MoneySign" + place + ".y"), Files.getDataFile().getInt("MoneySign" + place + ".z")).subtract(0, 2, 0);
+			Location loc = new Location(Bukkit.getWorld("PrisonMap"), -184, 60, 230).subtract(i, 2, 0);
 			Sign sign = (Sign) loc.getBlock().getState();
-			String name = leaders.get(i);
-			int money = Stats.getStats(name).getEnchantedShards();
-			sign.setLine(0, "§8§m--§b§l" + place + "§8§m--");
-			sign.setLine(1, "§b§l" + trimName(name));
+			String name = Files.getDataFile().getString("Players." + leaders.get(i) + ".Name");
+			String uuid = leaders.get(i);
+			int money = QuestAPI.getFavor(uuid);
+			sign.setLine(0, "§8§m--§e§l" + place + "§8§m--");
+			sign.setLine(1, "§e§l" + trimName(name));
 			sign.setLine(2, "§8" + money);
-			sign.setLine(3, "§7§oMost E Shards");
+			sign.setLine(3, "§7§oMost Favors");
 			sign.update();
 		}
 	}

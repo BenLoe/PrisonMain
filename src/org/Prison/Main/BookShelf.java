@@ -22,14 +22,17 @@ public class BookShelf {
 			switch(current){
 			case 5:{
 				int booster = 1;
-				if (RankType.getRank(p).equals(RankType.VIP)){
-					booster =2 ;
-				}else{
-					if (!RankType.getRank(p).equals(RankType.NONE)){
+				if (RankType.getRank(p) != RankType.NONE){
+					if (RankType.getRank(p) == RankType.VIP){
+						booster = 2;
+					}else
+					if (RankType.getRank(p) == RankType.ELITE){
 						booster = 3;
+					}else{
+						booster = 4;
 					}
 				}
-				Files.getDataFile().set("Players." + p.getName() + ".Smart" , SmartTrait.getSmart(p) + booster);
+				Files.getDataFile().set("Players." + p.getUniqueId() + ".Smart" , SmartTrait.getSmart(p) + booster);
 				Files.saveDataFile();
 				SmartTrait.checkLevelUp(p);
 			}

@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
 public class SpeedTrait {
 
 	public static int getLevel(Player p){
-		if (Files.getDataFile().contains("Players." + p.getName() + ".Speed")){
-			return Files.getDataFile().getInt("Players." + p.getName() + ".Speed");
+		if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Speed")){
+			return Files.getDataFile().getInt("Players." + p.getUniqueId() + ".Speed");
 		}else{
 			return 0;
 		}
@@ -87,7 +87,7 @@ public class SpeedTrait {
 		if (currentlvl < 15){
 			p.sendMessage("§a§lLevel Up! §9Your speed level is now " + (currentlvl + 1));
 			int newlvl = currentlvl + 1;
-			Files.getDataFile().set("Players." + p.getName() + ".Speed", newlvl);
+			Files.getDataFile().set("Players." + p.getUniqueId() + ".Speed", newlvl);
 			Files.saveDataFile();
 			setCorrectSpeed(p);
 			p.setStatistic(Statistic.WALK_ONE_CM, 0);

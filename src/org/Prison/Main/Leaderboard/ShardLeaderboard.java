@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -24,7 +25,7 @@ public class ShardLeaderboard {
 		CompareValues comp = new CompareValues(moneys);
 		TreeMap<String,Integer> sorted = new TreeMap<String,Integer>(comp);
 		for (String s : Files.getDataFile().getStringList("MoneyPlayers")){
-			moneys.put(s, Stats.getStats(s).getShards());
+			moneys.put(Files.getDataFile().getString("Players." + s + ".Name"), Stats.getStats(UUID.fromString(s)).getShards());
 		}
 		
 		sorted.putAll(moneys);
@@ -39,7 +40,7 @@ public class ShardLeaderboard {
 		}
 		for (int i = 0; i <= 9 ; i++){
 			int place = i + 1;
-			Location loc = new Location(Bukkit.getWorld("PrisonMap"), Files.getDataFile().getInt("MoneySign" + place + ".x"), Files.getDataFile().getInt("MoneySign" + place + ".y"), Files.getDataFile().getInt("MoneySign" + place + ".z")).subtract(0, 1, 0);
+			Location loc = new Location(Bukkit.getWorld("PrisonMap"), -184, 60, 230).subtract(i, 1, 0);
 			Sign sign = (Sign) loc.getBlock().getState();
 			String name = leaders.get(i);
 			int money = Stats.getStats(name).getShards();

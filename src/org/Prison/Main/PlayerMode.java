@@ -16,7 +16,6 @@ public class PlayerMode {
 			return false;
 		}
 	}
-	@SuppressWarnings("deprecation")
 	public static void setInPlayerMode(boolean b, Player p){
 		if (b){
 			if (!Files.config().getStringList("PlayerMode").contains(p.getName())){

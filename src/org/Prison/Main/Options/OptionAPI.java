@@ -1,15 +1,19 @@
 package org.Prison.Main.Options;
 
+import java.util.UUID;
+
 import org.Prison.Main.Files;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class OptionAPI {
 
 	public static boolean isEnabled(OptionType t, String name){
+		UUID uuid = Bukkit.getPlayer(name).getUniqueId();
 		switch(t){
 		case FRIENDS:{
-			if (Files.getDataFile().contains("Players." + name + ".Friend")){
-				if (Files.getDataFile().getBoolean("Players." + name + ".Friend")){
+			if (Files.getDataFile().contains("Players." + uuid + ".Friend")){
+				if (Files.getDataFile().getBoolean("Players." + uuid + ".Friend")){
 					return true;
 				}else{
 					return false;
@@ -19,8 +23,8 @@ public class OptionAPI {
 			}
 		}
 		case VISIBILITY:{
-			if (Files.getDataFile().contains("Players." + name + ".Visibility")){
-				if (Files.getDataFile().getBoolean("Players." + name + ".Visibility")){
+			if (Files.getDataFile().contains("Players." + uuid + ".Visibility")){
+				if (Files.getDataFile().getBoolean("Players." + uuid + ".Visibility")){
 					return true;
 				}else{
 					return false;
@@ -30,8 +34,8 @@ public class OptionAPI {
 			}
 		}
 		case LETTER:{
-			if (Files.getDataFile().contains("Players." + name + ".Letter1")){
-				if (Files.getDataFile().getBoolean("Players." + name + ".Letter1")){
+			if (Files.getDataFile().contains("Players." + uuid + ".Letter1")){
+				if (Files.getDataFile().getBoolean("Players." + uuid + ".Letter1")){
 					return true;
 				}else{
 					return false;
@@ -41,8 +45,8 @@ public class OptionAPI {
 			}
 		}
 		case ACHIEVEMENTS:{
-			if (Files.getDataFile().contains("Players." + name + ".Achievements")){
-				if (Files.getDataFile().getBoolean("Players." + name + ".Achievements")){
+			if (Files.getDataFile().contains("Players." + uuid + ".Achievements")){
+				if (Files.getDataFile().getBoolean("Players." + uuid + ".Achievements")){
 					return true;
 				}else{
 					return false;
@@ -52,8 +56,8 @@ public class OptionAPI {
 			}
 		}
 		case FIXED:{
-			if (Files.getDataFile().contains("Players." + name + ".Fixed")){
-				if (Files.getDataFile().getBoolean("Players." + name + ".Fixed")){
+			if (Files.getDataFile().contains("Players." + uuid + ".Fixed")){
+				if (Files.getDataFile().getBoolean("Players." + uuid + ".Fixed")){
 					return true;
 				}else{
 					return false;
@@ -67,7 +71,7 @@ public class OptionAPI {
 	}
 	
 	public static void reverse(OptionType t, Player p){
-		String name = p.getName();
+		String name = p.getUniqueId().toString();
 		switch(t){
 		case FRIENDS:{
 			if (isEnabled(OptionType.FRIENDS, p.getName())){

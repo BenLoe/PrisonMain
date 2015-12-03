@@ -7,8 +7,8 @@ public class TonyStorageAPI {
 
 	
 	public static boolean hasAccessTo(Player p, int id){
-		if (Files.getDataFile().contains("Players." + p.getName() + ".Chest" + id)){
-			if (Files.getDataFile().getBoolean("Players." + p.getName() + ".Chest" + id)){
+		if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Chest" + id)){
+			if (Files.getDataFile().getBoolean("Players." + p.getUniqueId() + ".Chest" + id)){
 				return true;
 			}
 		}

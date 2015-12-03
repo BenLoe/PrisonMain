@@ -3,11 +3,11 @@ package org.Prison.Main;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import mkremins.fanciful.FancyMessage;
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.IChatBaseComponent;
-import net.minecraft.server.v1_8_R1.PacketPlayOutPlayerListHeaderFooter;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
 
 import org.Prison.Friends.FriendAPI;
 import org.Prison.Main.InfoBoard.InfoBoard;
@@ -17,12 +17,13 @@ import org.Prison.Main.Options.OptionType;
 import org.Prison.Main.Ranks.RankType;
 import org.Prison.Main.RegionChecker.VisibleLines;
 import org.Prison.Main.Traits.SpeedTrait;
+import org.Prison.Main.mkremins.fanciful.FancyMessage;
 import org.PrisonMain.Achievement.AchievementAPI;
 import org.PrisonMain.Achievement.Menu.AchievementMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
@@ -34,42 +35,57 @@ public class JoinEvent {
 		
 	}
 	public void Join(PlayerJoinEvent event){
-		final Player p = event.getPlayer();
-		SpeedTrait.setCorrectSpeed(p);
+		final Player p = event.getPlayer();		
+		final boolean firstjoin = Files.getDataFile().contains("Players." + p.getUniqueId() + ".Letter");
 		event.setJoinMessage(null);
-		if (Files.getDataFile().contains("Players." + p.getName() + ".Votes")){
-			int current = Files.getDataFile().getInt("Players." + p.getName() + ".Votes");
-			if (current >= 50){
-				Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), new Runnable(){
-					public void run(){
-					AchievementAPI.completeAchievement(p, AchievementMenu.THE_VOTING_KING);
-					}
-				},45l);
-			}
-		}
-		if (RankType.getRank(p).equals(RankType.ELITE) || RankType.getRank(p).equals(RankType.VIP)){
+		final RankType rank = RankType.getRank(p);
+		if (rank != RankType.NONE){
 			Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), new Runnable(){
 				public void run(){
-					AchievementAPI.completeAchievement(p, AchievementMenu.LIVING_THE_FANCY_LIFE);
-					AchievementAPI.completeAchievement(p, AchievementMenu.LIVING_THE_EXTRA_FANCY_LIFE);
+					int current = 0;
+					if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Votes")){
+						current = Files.getDataFile().getInt("Players." + p.getUniqueId() + ".Votes");
+						if (current >= 50){
+							AchievementAPI.completeAchievement(p, AchievementMenu.THE_VOTING_KING);
+						}
+					}
+					if (rank == RankType.VIP){
+						AchievementAPI.completeAchievement(p, AchievementMenu.LIVING_THE_FANCY_LIFE);
+					}
+					if (rank == RankType.ELITE){
+						AchievementAPI.completeAchievement(p, AchievementMenu.LIVING_THE_FANCY_LIFE);
+						AchievementAPI.completeAchievement(p, AchievementMenu.LIVING_THE_EXTRA_FANCY_LIFE);
+					}
+					if (rank == RankType.ULTRA){
+						AchievementAPI.completeAchievement(p, AchievementMenu.LIVING_THE_FANCY_LIFE);
+						AchievementAPI.completeAchievement(p, AchievementMenu.LIVING_THE_EXTRA_FANCY_LIFE);
+						AchievementAPI.completeAchievement(p, AchievementMenu.TOO_FANCY);
+					}
 				}
 			}, 45l);
 		}
 		ItemAPI.givePlayerItems(p);
 		if (!OptionAPI.isEnabled(OptionType.VISIBILITY, p.getName())){
 			for (Player p1 : Bukkit.getOnlinePlayers()){
+				if (!firstjoin && !p1.getName().equals(p.getName())){
+					p1.sendMessage("§b§lNew Player > §e" + p.getName());
+				}
+				if (!FriendAPI.getFriendList(p.getName()).contains(p1.getName())){
+					p.hidePlayer(p1);
+				}else{
+					if (!RankType.getRank(p).equals(RankType.NONE) && !RankType.getRank(p).equals(RankType.VIP)){
+						p1.sendMessage("§e§l§oYour friend:");
+					}else{
+						p1.sendMessage(ChatColor.YELLOW + p.getName() + " joined the server.");
+					}
+					p.showPlayer(p1);
+					
+				}
 				if (!RankType.getRank(p).equals(RankType.NONE) && !RankType.getRank(p).equals(RankType.VIP)){
 					p1.sendMessage(RankType.toNiceName(RankType.getRank(p)) + " " + RankType.getPlayerColor(RankType.getRank(p)) + p.getName() + " §ejoined.");
 				}
 				if (VisibleLines.in.contains(p1.getName())){
 					p.hidePlayer(p1);
-				}
-				if (!FriendAPI.getFriendList(p.getName()).contains(p1.getName())){
-					p.hidePlayer(p1);
-				}else{
-					p1.sendMessage(ChatColor.YELLOW + p.getName() + " joined the server.");
-					p.showPlayer(p1);
-					
 				}
 				if (!OptionAPI.isEnabled(OptionType.VISIBILITY, p1.getName())){
 					if (!FriendAPI.getFriendList(p1.getName()).contains(p.getName())){
@@ -81,14 +97,21 @@ public class JoinEvent {
 			}
 		}else{
 			for (Player p1 : Bukkit.getOnlinePlayers()){
+				if (!firstjoin && !p1.getName().equals(p.getName())){
+					p1.sendMessage("§b§lNew Player > §e" + p.getName());
+				}
+				if (FriendAPI.getFriendList(p1.getName()).contains(p.getName())){
+					if (!RankType.getRank(p).equals(RankType.NONE) && !RankType.getRank(p).equals(RankType.VIP)){
+						p1.sendMessage("§e§l§oYour friend:");
+					}else{
+						p1.sendMessage(ChatColor.YELLOW + p.getName() + " joined the server.");
+					}
+				}
 				if (!RankType.getRank(p).equals(RankType.NONE) && !RankType.getRank(p).equals(RankType.VIP)){
 					p1.sendMessage(RankType.toNiceName(RankType.getRank(p)) + " " + RankType.getPlayerColor(RankType.getRank(p)) + p.getName() + " §ejoined.");
 				}
 				if (VisibleLines.in.contains(p1.getName())){
 					p.hidePlayer(p1);
-				}
-				if (FriendAPI.getFriendList(p1.getName()).contains(p.getName())){
-					p1.sendMessage(ChatColor.YELLOW + p.getName() + " joined the server.");
 				}
 				if (!OptionAPI.isEnabled(OptionType.VISIBILITY, p1.getName())){
 					if (FriendAPI.getFriendList(p1.getName()).contains(p.getName())){
@@ -132,16 +155,30 @@ public class JoinEvent {
 				p.sendMessage("   ");
 				p.sendMessage("   ");
 				p.sendMessage("§2§l§m----------------------------------------");
-				if (!Files.getDataFile().contains("Players." + p.getName())){
+				if (!firstjoin){
 					p.sendMessage("§eHey there new player, we suggest taking the welcome tutorial to get yourself started. Just talk to the villager outside the cellblocks. Here are some ancient pickaxes, go and indetify them.");
 					giveAncients(p);
-					Files.getDataFile().set("Players." + p.getName() + ".Letter", "A");
+					Files.getDataFile().set("Players." + p.getUniqueId() + ".Letter", "A");
 					Files.saveDataFile();
 				}
 				p.updateInventory();
-				p.teleport(Main.getLocation("spawn"));
+				if (!p.getWorld().getName().equals("NetherMap")){
+					p.teleport(Main.getLocation("spawn"));
+				}else{
+					p.teleport(Main.getLocation("NetherSpawn"));
+				}
+				SpeedTrait.setCorrectSpeed(p);
+				if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Name")){
+					if (!Files.getDataFile().getString("Players." + p.getUniqueId() + ".Name").equals(p.getName())){
+						Files.getDataFile().set("Players." + p.getUniqueId() + ".Name", p.getName());
+						Files.saveDataFile();
+					}
+				}else{
+					Files.getDataFile().set("Players." + p.getUniqueId() + ".Name", p.getName());
+					Files.saveDataFile();
+				}
 			}
-		}, 40l);
+		}, 15l);
 		if (p.getWorld().getName().equals("PVP")){
 			me.BenLoe.PitPvP.InfoBoard.setBoard(p);
 		}else{
