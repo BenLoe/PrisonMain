@@ -2,6 +2,7 @@ package org.Prison.Main;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -10,6 +11,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class Files {
 	public static File f = new File("plugins/PrisonMain/Data.yml");
 	public static YamlConfiguration dataFile = YamlConfiguration.loadConfiguration(f);
+	public static File f1 = new File("plugins/PrisonMain/HourLog.yml");
+	public static YamlConfiguration logFile = YamlConfiguration.loadConfiguration(f1);
 	public static Main plugin;
 	public Files(Main instance){
 		plugin = instance;
@@ -31,9 +34,22 @@ public class Files {
 		return dataFile;
 	}
 	
+	public static YamlConfiguration getLogFile(){
+		return logFile;
+	}
+	
 	public static void saveDataFile(){
 		try {
 			getDataFile().save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void saveLogFile(){
+		try {
+			getLogFile().save(f1);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

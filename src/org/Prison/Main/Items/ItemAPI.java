@@ -38,11 +38,6 @@ public class ItemAPI {
 		ItemStack menu = getItem(Material.NETHER_STAR, ChatColor.GREEN + "Game Menu", lore2);
 		p.getInventory().setItem(7, gadget);
 		p.getInventory().setItem(8, menu);
-		if (p.getInventory().getHelmet() != null){
-		if (p.getInventory().getHelmet().getTypeId() == 397){
-			p.getInventory().setHelmet(null);
-		}
-		}
 		p.updateInventory();
 	}
 	public static ItemStack getItem(Material m, String DisplayName, List<String> Lore){

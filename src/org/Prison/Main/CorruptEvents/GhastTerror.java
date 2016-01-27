@@ -63,7 +63,7 @@ public class GhastTerror {
 					}
 				}, 40);
 			}
-		}, 110 * 20);
+		}, 80 * 20);
 	}
 	
 	public static void check(){

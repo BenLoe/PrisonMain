@@ -1,18 +1,25 @@
 package org.Prison.Main;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
 
+import me.BenLoe.Blackmarket.Stats.Stats;
 import me.BenLoe.Gadgets.Types.DeviceType;
+import me.BenLoe.Gadgets.Types.SantaMorph;
+import me.BenLoe.SuperSpleef.Game;
 
+import org.Prison.Friends.FriendAPI;
 import org.Prison.Main.Booster.BoosterCooldown;
 import org.Prison.Main.Booster.BoosterManager;
-import org.Prison.Main.CorruptEvents.DropKey;
-import org.Prison.Main.CorruptEvents.FireRain;
 import org.Prison.Main.CorruptEvents.GhastTerror;
 import org.Prison.Main.CorruptEvents.Pigmen;
 import org.Prison.Main.Currency.CrystalCommands;
@@ -21,22 +28,26 @@ import org.Prison.Main.Items.ItemAPI;
 import org.Prison.Main.Leaderboard.EShardLeaderboard;
 import org.Prison.Main.Leaderboard.MoneyLeaderboard;
 import org.Prison.Main.Leaderboard.ShardLeaderboard;
+import org.Prison.Main.Letter.LetterType;
 import org.Prison.Main.Menu.CrafterMenu;
 import org.Prison.Main.Menu.MenuType;
 import org.Prison.Main.Options.OptionAPI;
 import org.Prison.Main.Options.OptionType;
+import org.Prison.Main.Ranks.RankType;
 import org.Prison.Main.RegionChecker.CellBlockLines;
 import org.Prison.Main.RegionChecker.DonatorCellLine;
 import org.Prison.Main.Trails.ParticleType;
 import org.Prison.Main.Traits.SpeedTrait;
 import org.Prison.Main.Tutorial.Tutorial;
 import org.Prison.Punish.PunishAPI;
+import org.Prison.Punish.SQLAccess;
 import org.PrisonMain.Achievement.AchievementAPI;
 import org.PrisonMain.Achievement.Menu.AchievementMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -47,7 +58,14 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
+import org.bukkit.event.player.PlayerPreLoginEvent.Result;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
 public class Main extends JavaPlugin {
@@ -58,6 +76,7 @@ public class Main extends JavaPlugin {
 	public static HashMap<String,MenuType> Menu = new HashMap<String,MenuType>();
 	public static HashMap<String,Integer> Tutorialint = new HashMap<String,Integer>();
 	public static HashMap<String,Integer> bookshelf = new HashMap<String,Integer>();
+	public static HashMap<String,Entry<Location,Integer>> antibook = new HashMap<>();
 	public static HashMap<String,Integer> wood = new HashMap<String,Integer>();
 	public static HashMap<String,Block> woodBlock = new HashMap<String,Block>();
 	public static HashMap<String,Block> bookshelfBlock = new HashMap<String,Block>();
@@ -68,11 +87,36 @@ public class Main extends JavaPlugin {
 	public static boolean chatSilenced = false;
 	public static List<UUID> sheeps = new ArrayList<UUID>();
 	public static List<Location> particles = new ArrayList<>();
+	public static List<String> Vanish = new ArrayList<>();
 	public static HashMap<String,String> MineVote = new HashMap<>();
+	public static boolean playerv = true;
+	public static boolean monthly = false;
 	
 	@SuppressWarnings("deprecation")
 	public void onEnable(){
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		Scoreboard board = manager.getMainScoreboard();
+		Team owner = board.registerNewTeam("Owner");
+		owner.setPrefix("§c§lOWNER §c");
+		Team admin = board.registerNewTeam("Admin");
+		admin.setPrefix("§c§lADMIN §c");
+		Team mod = board.registerNewTeam("Mod");
+		mod.setPrefix("§4§lMOD §4");
+		Team jrmod = board.registerNewTeam("JrMod");
+		jrmod.setPrefix("§4§lJRMOD §4");
+		Team ultra = board.registerNewTeam("Ultra");
+		ultra.setPrefix("§6§lULTRA §6");
+		Team elite = board.registerNewTeam("Elite");
+		elite.setPrefix("§a§lELITE §a");
+		Team vip = board.registerNewTeam("Vip");
+		vip.setPrefix("§3§lVIP §3");
+		Team normal = board.registerNewTeam("Normal");
+		normal.setPrefix("§7");
 		Files.saveDataFile();
+		if (!Files.getLogFile().contains("Log")){
+			Files.getLogFile().set("Log", new ArrayList<String>());
+			Files.saveLogFile();
+		}
 		Bukkit.getScheduler().runTaskLater(this, new Runnable(){
 			public void run(){
 				for (Player p : Bukkit.getOnlinePlayers()){
@@ -96,6 +140,7 @@ public class Main extends JavaPlugin {
 				sheeps.add(sheep1.getUniqueId());
 				sheeps.add(sheep2.getUniqueId());
 				sheeps.add(sheep3.getUniqueId());
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "baltop");
 				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "killall drops PrisonMap");
 				Calendar c = Calendar.getInstance();
 				Files.getDataFile().set("CurrentMonth", c.get(Calendar.MONTH));
@@ -113,6 +158,13 @@ public class Main extends JavaPlugin {
 							guard.put(p.getName(), newi);
 						}
 					}
+					if (!org.Prison.Lucky.Game.playerInGame(p)){
+						p.setFoodLevel(22);
+					}else{
+						if (org.Prison.Lucky.Game.gs != org.Prison.Lucky.Game.GameState.FIGHT){
+							p.setFoodLevel(22);
+						}
+					}
 				}
 				for (Sheep sheep : Bukkit.getWorld("PrisonMap").getEntitiesByClass(Sheep.class)){
 					if (sheeps.contains(sheep.getUniqueId())){
@@ -122,7 +174,6 @@ public class Main extends JavaPlugin {
 					}
 				}
 				GhastTerror.check();
-				FireRain.check();
 				Pigmen.check();
 			}
 		}, 20 *5l, 20l);
@@ -147,20 +198,39 @@ public class Main extends JavaPlugin {
 				
 				for (Player p : Bukkit.getOnlinePlayers()){
 					ParticleType util = ParticleType.getActive(p);
-					if (!util.equals(ParticleType.NONE) && !util.equals(ParticleType.HELL) && !util.equals(ParticleType.HALO) && !util.equals(ParticleType.WITCH)){
+					if (!util.equals(ParticleType.NONE) && !util.equals(ParticleType.HELL) && !util.equals(ParticleType.HALO) && !util.equals(ParticleType.WITCH) && !util.equals(ParticleType.CORRUPT)){
 						util.display(p);
 					}
 				}
 				GhastTerror.checkBlockRegen();
-				FireRain.check2();
 				CrafterMenu.check();
+				if (monthly){
+					Location loc = new Location(Bukkit.getWorld("PrisonMap"), -222.5, 70.4, 189.5);
+					for (int in = 0; in < 3; in++){
+						double x = (-0.08 + (0.08 - -0.08) * new Random().nextDouble());
+						double z = (-0.08 + (0.08 - -0.08) * new Random().nextDouble());
+						ItemStack items = new ItemStack(Material.NETHER_STAR);
+						ItemMeta itemm = items.getItemMeta();
+						itemm.setDisplayName(new Random().nextInt(100) + "diamond");
+						items.setItemMeta(itemm);
+						Item item = loc.getWorld().dropItem(loc, items);
+						item.setVelocity(new Vector(x, 0.3, z));
+						item.setPickupDelay(1000000);
+						CrafterMenu.items.add(item.getUniqueId());
+					}
+					for (Player p : Bukkit.getOnlinePlayers()){
+						if (p.getLocation().distance(loc) < 10){
+							p.playSound(loc, Sound.ITEM_PICKUP, 1f, 1f);
+						}
+					}
+				}
 			}
 		}, 5 * 20l, 4l);
 		Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new Runnable(){
 			public void run(){
 				for (Player p : Bukkit.getOnlinePlayers()){
 					ParticleType util = ParticleType.getActive(p);
-					if (util.equals(ParticleType.HELL) || util.equals(ParticleType.HALO) || util.equals(ParticleType.WITCH)){
+					if (util.equals(ParticleType.HELL) || util.equals(ParticleType.HALO) || util.equals(ParticleType.WITCH) || util.equals(ParticleType.CORRUPT)){
 						util.display1(p);
 					}
 				}
@@ -174,33 +244,78 @@ public class Main extends JavaPlugin {
 					for (Player p : Bukkit.getOnlinePlayers()){
 					if (p.getWorld().getName().equals("NetherMap")) amount++;
 					}
-					if (amount > 1){
-						int r = new Random().nextInt(4) + 1;
+					if (amount >= 1){
+						int r = new Random().nextInt(3) + 1;
 						BoosterCooldown.setCooldown(6, "Event");
 						switch(r){
 						case 1 :
 							GhastTerror.startAttack();
 							break;
 						case 2 :
+						case 3:
 							Pigmen.start();
-							break;
-						case 3: 
-							FireRain.start();
-							break;
-						case 4:
-							DropKey.drop();
 							break;
 						}
 					}
 				}
-				BoosterCooldown.checkCooldown("Money");
-				if (!BoosterCooldown.hasCooldown("Money")){
+				Calendar c = Calendar.getInstance();
+				if (!Files.getDataFile().contains("StatHour")){
+					Files.getDataFile().set("StatHour", c.get(Calendar.HOUR_OF_DAY));
+					Files.saveDataFile();
+				}
+				int filetime = Files.getDataFile().getInt("StatHour");
+				if (filetime != c.get(Calendar.HOUR_OF_DAY)){
+					if (Files.getLogFile().getStringList("Log").size() != 0){
+					int average = 0;
+					for (String s : Files.getLogFile().getStringList("Log")){
+						int time = Integer.parseInt(s.split(": ")[1]);
+						average += time;
+					}
+					average = (int) Math.round(average / Files.getLogFile().getStringList("Log").size());
+					SQLAccess.openConnection();
+					try {
+						PreparedStatement sql = SQLAccess.connection.prepareStatement("SELECT * FROM `PlayersOnline` WHERE `Hour`=?");
+						sql.setInt(1, filetime);
+						ResultSet rs = sql.executeQuery();
+						rs.first();
+						double currentaverage = rs.getInt(2);
+						int timeschecked = rs.getInt(3);
+						if (timeschecked < 4){
+							timeschecked++;
+						}
+						double percent = 100 / timeschecked;
+						int newaverage = (int) Math.round(currentaverage * ((100.0 - percent)/100) + average * (percent)/100);
+						sql.close();
+						rs.close();
+						PreparedStatement sql1 = SQLAccess.connection.prepareStatement("UPDATE `PlayersOnline` SET `Average`=?,`TimesChecked`? WHERE `Hour`=?");
+						sql1.setInt(1, newaverage);
+						sql1.setInt(2, timeschecked);
+						sql1.setInt(3, filetime);
+						sql1.executeUpdate();
+						sql1.close();
+						SQLAccess.closeConnection();
+						
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					}
+					Files.getLogFile().set("Log", new ArrayList<String>());
+					Files.saveLogFile();
+					Files.getDataFile().set("HourStat", c.get(Calendar.HOUR_OF_DAY));
+				}else{
+					List<String> log = Files.getLogFile().getStringList("Log");
+					log.add("Players: " + Bukkit.getOnlinePlayers().size());
+					Files.getLogFile().set("Log", log);
+					Files.saveLogFile();
+				}
+				BoosterCooldown.checkCooldown("Money1");
+				if (!BoosterCooldown.hasCooldown("Money1")){
 					if (Files.getDataFile().getStringList("MoneyPlayers").size() > 13){
 					MoneyLeaderboard.updateSigns();
 					ShardLeaderboard.updateSigns();
 					EShardLeaderboard.updateSigns();
 					}
-					BoosterCooldown.setCooldown(5, "Money");
+					BoosterCooldown.setCooldown(5, "Money1");
 				}
 				Bukkit.getWorld("PrisonMap").setStorm(false);
 				Bukkit.getWorld("PrisonMap").setWeatherDuration(10000);
@@ -230,7 +345,7 @@ public class Main extends JavaPlugin {
 							ParticleEffect.SPELL_WITCH.display(0f, 0f, 0f, 0f, 6, loc, 20);
 						}
 					}
-					DropKey.check();
+					TreeExplode.check();
 			}
 		}, 20 *5l, 8l);
 		for (Player p : Bukkit.getOnlinePlayers()){
@@ -250,6 +365,21 @@ public class Main extends JavaPlugin {
 	}
 	
 	public void onDisable(){
+		for (Player p : Bukkit.getOnlinePlayers()){
+			if (Main.Vanish.contains(p.getName())){
+				p.sendMessage("§c§lNo longer vanished.");
+				p.setPlayerListName(RankType.getPlayerColor(RankType.getRank(p)) + p.getName());
+				for (Player p1 : Bukkit.getOnlinePlayers()){
+					if (!OptionAPI.isEnabled(OptionType.VISIBILITY, p1.getName())){
+						if (FriendAPI.getFriendList(p1.getName()).contains(p.getName())){
+							p1.showPlayer(p);
+						}
+					}else{
+						p1.showPlayer(p);
+					}
+				}
+			}
+		}
 		for (Sheep sheep : Bukkit.getWorld("PrisonMap").getEntitiesByClass(Sheep.class)){
 			if (sheeps.contains(sheep.getUniqueId())){
 				sheep.teleport(sheep.getLocation().subtract(0, 500, 0));
@@ -257,12 +387,29 @@ public class Main extends JavaPlugin {
 		}
 		Events.plugin = null;
 		Files.plugin = null;
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		Scoreboard board = manager.getMainScoreboard();
+		Team owner = board.getTeam("Owner");
+		owner.unregister();
+		Team admin = board.getTeam("Admin");
+		admin.unregister();
+		Team mod = board.getTeam("Mod");
+		mod.unregister();
+		Team jrmod = board.getTeam("JrMod");
+		jrmod.unregister();
+		Team ultra = board.getTeam("Ultra");
+		ultra.unregister();
+		Team elite = board.getTeam("Elite");
+		elite.unregister();
+		Team vip = board.getTeam("Vip");
+		vip.unregister();
+		Team normal = board.getTeam("Normal");
+		normal.unregister();
 	}
 	
 	public static Location getLocation(String type){
 		return new Location(Bukkit.getWorld(Files.config().getString("Location." + type + ".world")), Files.config().getInt("Location." + type + ".x"), Files.config().getInt("Location." + type + ".y"),Files.config().getInt("Location." + type + ".z")).setDirection(Files.config().getVector("Location." + type + ".Direction"));
 	}
-	@SuppressWarnings("unchecked")
 	public boolean onCommand(CommandSender sender, Command cmd,
 			String Label, String[] args){
 		if (Label.equalsIgnoreCase("crystal")){
@@ -457,22 +604,299 @@ public class Main extends JavaPlugin {
 					p.sendMessage(ChatColor.RED + "You cannot do that right now.");
 				}
 			}
+			if (Label.equalsIgnoreCase("Build")){
+				if (p.hasPermission("Build.Build")){
+					p.teleport(new Location(Bukkit.getWorld("Build"), 88.5, 23, 15.5));
+				}else{
+					p.sendMessage(ChatColor.RED + "You are not a builder.");
+				}
+			}
+			if (Label.equalsIgnoreCase("pVanish")){
+				if (p.hasPermission("Vanish.Vanish")){
+					if (Main.Vanish.contains(p.getName())){
+						p.sendMessage("§c§lNo longer vanished.");
+						p.setPlayerListName(RankType.getPlayerColor(RankType.getRank(p)) + p.getName());
+						for (Player p1 : Bukkit.getOnlinePlayers()){
+							if (!OptionAPI.isEnabled(OptionType.VISIBILITY, p1.getName())){
+								if (FriendAPI.getFriendList(p1.getName()).contains(p.getName())){
+									p1.showPlayer(p);
+								}
+							}else{
+								p1.showPlayer(p);
+							}
+						}
+						Main.Vanish.remove(p.getName());
+					}else{
+						p.sendMessage("§a§lYou are vanished from normal players.");
+						p.setPlayerListName(RankType.getPlayerColor(RankType.getRank(p)) + p.getName() + " §7[Vanished]");
+						for (Player p1 : Bukkit.getOnlinePlayers()){
+							if (!p1.hasPermission("Vanish.See")){
+								p1.hidePlayer(p);
+							}
+						}
+						Main.Vanish.add(p.getName());
+					}
+				}else{
+					p.sendMessage(ChatColor.RED + "This command is for moderators only.");
+				}
+			}
+			if (Label.equalsIgnoreCase("SecretSanta")){
+				int util = 1;
+				if (util < 10){
+					p.sendMessage(ChatColor.RED + "Santa is gone for the year!");
+					return true;
+				}
+				if (args.length < 1 || args.length > 2){
+					p.sendMessage("§cWrong syntax: /SecretSanta (Name)");
+				}else{
+					Calendar c = Calendar.getInstance();
+					int day = c.get(Calendar.DAY_OF_YEAR);
+					int pday = -10;
+					if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Secret")){
+						pday = Files.getDataFile().getInt("Players." + p.getUniqueId() + ".Secret");
+					}
+					if (pday != day){
+						if (args[0].equalsIgnoreCase(p.getName())){
+							p.sendMessage("§2§l[§4§lSanta§2§l]: §cHO HO No... you can't give secret santa's to yourself!");
+							return true;
+						}
+						if (Bukkit.getPlayer(args[0]) != null){
+							if (Game.playerInGame(Bukkit.getPlayer(args[0]))){
+								p.sendMessage("§2§l[§4§lSanta§2§l]: §cThat player is in a super spleef game, please wait until they leave.");
+								return true;
+							}
+							ItemStack presents = SantaMorph.getRandomPresent();
+							ItemMeta itemm = presents.getItemMeta();
+							itemm.setDisplayName("§b§lPresent §7(Right click altar)");
+							presents.setItemMeta(itemm);
+							Player give = Bukkit.getPlayer(args[0]);
+							give.sendMessage("§2§l[§4§lSanta§2§l]: §bSomeone just sent you a secret santa of 1 present!");
+							give.playSound(give.getLocation(), Sound.LEVEL_UP, 1f, 1f);
+							give.getInventory().addItem(presents);
+							give.updateInventory();
+							p.sendMessage("§2§l[§4§lSanta§2§l]: §aYour secret santa has been sent!");
+							Files.getDataFile().set("Players." + p.getUniqueId() + ".Secret", day);
+							Files.saveDataFile();
+						}else{
+							p.sendMessage("§2§l[§4§lSanta§2§l]: §cThat player is not online!");
+						}
+					}else{
+						p.sendMessage("§2§l[§4§lSanta§2§l]: §cYou already sent someone a secret santa today!");
+					}
+				}
+			}
+			if (Label.equalsIgnoreCase("Convert")){
+				if (p.getItemInHand() != null){
+					ItemStack item = p.getItemInHand();
+					if (item.hasItemMeta()){
+						ItemMeta itemm = item.getItemMeta();
+						if (itemm.hasLore() && itemm.getLore().size() > 1){
+							if (itemm.getLore().get(1).contains("Efficiency") || itemm.getLore().get(1).contains("Protection") || itemm.getLore().get(1).contains("Sharpness")){
+								if (itemm.hasItemFlag(ItemFlag.HIDE_ENCHANTS)){
+									itemm.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+									item.setItemMeta(itemm);
+									p.getInventory().setItemInHand(item);
+									p.updateInventory();
+									p.sendMessage(ChatColor.GREEN + "Converted! You may now use it in storage chests.");
+									return true;
+								}else{
+									p.sendMessage(ChatColor.RED + "Item already converted.");
+									return true;
+								}
+							}
+						}
+					}
+				}
+				p.sendMessage(ChatColor.RED + "Your currently held item is not convertible.");
+			}
 			if (p.isOp()){
-			if (Label.equalsIgnoreCase("test1")){
-				FireRain.start();
-			}
-			if (Label.equalsIgnoreCase("test2")){
-				GhastTerror.startAttack();
-			}
-			if (Label.equalsIgnoreCase("test3")){
-				Pigmen.start();
-			}
+				if (Label.equalsIgnoreCase("test2")){
+					Set<String> Favor = me.BenLoe.quest.Files.getDataFile().getConfigurationSection("Players").getKeys(false);
+					for (String s : Favor){
+						if (!s.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")){
+							me.BenLoe.quest.Files.getDataFile().set("Players." + s, null);
+						}
+					}
+					me.BenLoe.quest.Files.saveDataFile();
+				}
+				if (Label.equalsIgnoreCase("test3")){
+					p.sendMessage("test3 received");
+					Stats.getStats(p.getUniqueId()).addShards(1000);
+				}
+				if (Label.equalsIgnoreCase("GiveVote")){
+					if (args.length == 1){
+						DeviceType.VOTING_KEY.setDevice(Bukkit.getPlayer(args[0]));
+						DeviceType.VOTING_KEY.addAmount(1, Bukkit.getPlayer(args[0]));
+						Bukkit.getPlayer(args[0]).sendMessage("§a§lThanks §afor voting. To use your voting key, go to §e/warp altar §aand right click the voting altar with it.");
+						Bukkit.getPlayer(args[0]).playSound(Bukkit.getPlayer(args[0]).getLocation(), Sound.LEVEL_UP, 1f, 1f);
+						ItemAPI.givePlayerItems(Bukkit.getPlayer(args[0]));
+						if (Files.getDataFile().contains("Players." + Bukkit.getPlayer(args[0]).getUniqueId() + ".Votes")){
+							int old = Files.getDataFile().getInt("Players." + Bukkit.getPlayer(args[0]).getUniqueId() + ".Votes");
+							Files.getDataFile().set("Players." + Bukkit.getPlayer(args[0]).getUniqueId() + ".Votes", old + 1);
+							Files.saveDataFile();
+							if ((old + 1) == 50){
+								if (Bukkit.getPlayer(args[0]) != null){
+									AchievementAPI.completeAchievement(Bukkit.getPlayer(args[0]), AchievementMenu.THE_VOTING_KING);
+								}
+							}
+						}else{
+							Files.getDataFile().set("Players." + Bukkit.getPlayer(args[0]).getUniqueId() + ".Votes", 1);
+							Files.saveDataFile();
+						}
+					}
+					
+					if (args.length == 2){
+						DeviceType.VOTING_KEY.setDevice(Bukkit.getPlayer(args[1]));
+						DeviceType.VOTING_KEY.addAmount(Integer.parseInt(args[1]), Bukkit.getPlayer(args[0]));
+						Bukkit.getPlayer(args[0]).sendMessage("§a§lThanks §afor voting. To use your voting key, go to §e/warp altar §aand right click the voting altar with it.");
+						Bukkit.getPlayer(args[0]).playSound(Bukkit.getPlayer(args[0]).getLocation(), Sound.LEVEL_UP, 1f, 1f);
+						ItemAPI.givePlayerItems(Bukkit.getPlayer(args[0]));
+					}
+				}
+				if (Label.equalsIgnoreCase("GiveCorrupt")){
+					if (args.length == 1){
+						DeviceType.CORRUPT_CHEST.addAmount(1, Bukkit.getPlayer(args[0]));
+						DeviceType.KEY.addAmount(1, Bukkit.getPlayer(args[0]));
+						ItemAPI.givePlayerItems(Bukkit.getPlayer(args[0]));
+					}
+					
+					if (args.length == 2){
+						DeviceType.CORRUPT_CHEST.addAmount(Integer.parseInt(args[1]), Bukkit.getPlayer(args[0]));
+						DeviceType.KEY.addAmount(Integer.parseInt(args[1]), Bukkit.getPlayer(args[0]));
+						ItemAPI.givePlayerItems(Bukkit.getPlayer(args[0]));
+					}
+				}
+				if (Label.equalsIgnoreCase("test1")){
+					p.sendMessage("§a§lCollect stats...");
+					int votes = 1517;
+					int speed = 0;
+					int intellect = 0;
+					int crystals = 0;
+					int blocksbroken = 0;
+					int timesranked = 0;
+					int superspleef = 0;
+					int achievementsgotten = 0;
+					int totalshards = 0;
+					int totalfavor = 0;
+					int totalgadgets = 0;
+					int mostgadgets = 0;
+					String mostgadgetss = "";
+					int nofriend = 0;
+					int unique = 0;
+					int votesdecember = 0;
+					
+					Set<String> PrisonMain = Files.getDataFile().getConfigurationSection("Players").getKeys(false);
+					for (String s : PrisonMain){
+						if (s.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")){
+							if (Files.getDataFile().contains("Players." + s + ".Speed")){
+								speed += Files.getDataFile().getInt("Players." + s + ".Speed");
+							}
+							if (Files.getDataFile().contains("Players." + s + ".Smartlvl")){
+								intellect += Files.getDataFile().getInt("Players." + s + ".Smartlvl");
+							}
+							if (Files.getDataFile().contains("Players." + s + ".Crystals")){
+								crystals += Files.getDataFile().getInt("Players." + s + ".Crystals");
+							}
+							if (Files.getDataFile().contains("Players." + s + ".Votes")){
+								votesdecember += Files.getDataFile().getInt("Players." + s + ".Votes");
+							}
+							if (Files.getDataFile().contains("Players." + s + ".Letter")){
+								LetterType l = LetterType.fromString(Files.getDataFile().getString("Players." + s + ".Letter"));
+								timesranked += (l.getInt() - 1);
+							}
+						}
+					}
+					Set<String> Achievement = org.PrisonMain.Achievement.Files.config().getConfigurationSection("Players").getKeys(false);
+					for (String s : Achievement){
+						if (s.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")){
+							if (org.PrisonMain.Achievement.Files.config().contains("Players." + s + ".Blocks")){
+								blocksbroken += org.PrisonMain.Achievement.Files.config().getInt("Players." + s + ".Blocks");
+							}
+							if (org.PrisonMain.Achievement.Files.config().contains("Players." + s + ".Completed")){
+								achievementsgotten += org.PrisonMain.Achievement.Files.config().getList("Players." + s + ".Completed").size();
+							}
+						}
+					}	
+					Set<String> Blackmarket = me.BenLoe.Blackmarket.Files.getDataFile().getConfigurationSection("Players").getKeys(false);
+					for (String s : Blackmarket){
+						if (s.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")){
+							if (me.BenLoe.Blackmarket.Files.getDataFile().contains("Players." + s + ".shards")){
+								totalshards += me.BenLoe.Blackmarket.Files.getDataFile().getInt("Players." + s + ".shards");
+							}
+						}
+					}
+					Set<String> Favor = me.BenLoe.quest.Files.getDataFile().getConfigurationSection("Players").getKeys(false);
+					for (String s : Favor){
+						if (s.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")){
+							if (me.BenLoe.quest.Files.getDataFile().contains("Players." + s + ".favor")){
+								totalfavor += me.BenLoe.quest.Files.getDataFile().getInt("Players." + s + ".favor");
+							}
+						}
+					}
+					Set<String> gadget = me.BenLoe.Gadgets.Files.getDataFile().getConfigurationSection("Players").getKeys(false);
+					for (String s : gadget){
+						if (s.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")){
+							for (DeviceType d : DeviceType.values()){
+								if (me.BenLoe.Gadgets.Files.getDataFile().contains("Players." + s + ".Device." + d.name())){
+									totalgadgets += me.BenLoe.Gadgets.Files.getDataFile().getInt("Players." + s + ".Device." + d.name());
+									if (mostgadgets < me.BenLoe.Gadgets.Files.getDataFile().getInt("Players." + s + ".Device." + d.name())){
+										mostgadgets =  me.BenLoe.Gadgets.Files.getDataFile().getInt("Players." + s + ".Device." + d.name());
+										mostgadgetss = d.name();
+									}
+								}
+							}
+						}
+					}
+					Set<String> SuperSpleef = me.BenLoe.SuperSpleef.Files.getDataFile().getConfigurationSection("Players").getKeys(false);
+					for (String s : SuperSpleef){
+						if (s.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")){
+							if (me.BenLoe.SuperSpleef.Files.getDataFile().contains("Players." + s + ".GamesPlayed")){
+								superspleef += me.BenLoe.SuperSpleef.Files.getDataFile().getInt("Players." + s + ".GamesPlayed");
+							}
+						}
+					}
+					Set<String> friends = org.Prison.Friends.Files.config().getConfigurationSection("Players").getKeys(false);
+					unique = friends.size();
+					for (String s : friends){
+						if (org.Prison.Friends.Files.config().contains("Players." + s + ".friends")){
+							if (org.Prison.Friends.Files.config().get("Players." + s + ".friends") instanceof String){
+								nofriend++;
+							}
+						}
+					}
+					p.sendMessage("§a§lStats collected!");
+					p.sendMessage("");
+					p.sendMessage("§7Unique Players: §e" + unique);
+					p.sendMessage("");
+					p.sendMessage("§7Total Crystals: §b" + crystals);
+					p.sendMessage("§7Total Shards: §9" + totalshards);
+					p.sendMessage("§7Total Favor Points: §e" + totalfavor);
+					p.sendMessage("");
+					p.sendMessage("§7Votes: §a" + votes);
+					p.sendMessage("§7Votes December: §a" + votesdecember);
+					p.sendMessage("§7Blocks Broken: §a" + blocksbroken);
+					p.sendMessage("§7Achievements Completed: §a" + achievementsgotten);
+					p.sendMessage("§7Times Ranked Up: §a" + timesranked);
+					p.sendMessage("§7Super spleef games played: §a" + superspleef);
+					p.sendMessage("");
+					p.sendMessage("§7Speed levels: §a" + speed);
+					p.sendMessage("§7Intellect levels: §a" + intellect);
+					p.sendMessage("");
+					p.sendMessage("§7Total gadgets: §a" + totalgadgets);
+					p.sendMessage("§7Most gadgets: §a" + mostgadgets);
+					p.sendMessage("§7Gadget type: §a" + mostgadgetss);
+					p.sendMessage("");
+					p.sendMessage("§7People with no friends: §a" + nofriend);
+					p.sendMessage("");
+					p.sendMessage("§b§lHappy Mother Fucking New Year!");
+				}
 			}
 		}else{
 			if (Label.equalsIgnoreCase("GiveVote")){
 				if (args.length == 1){
+					DeviceType.VOTING_KEY.setDevice(Bukkit.getPlayer(args[0]));
 					DeviceType.VOTING_KEY.addAmount(1, Bukkit.getPlayer(args[0]));
-					Bukkit.getPlayer(args[0]).sendMessage("§a§lThank you §afor voting. To use your voting key, select the §e\"voting key\" §agadget and right click the §e/warp altar §awith it.");
+					Bukkit.getPlayer(args[0]).sendMessage("§a§lThanks §afor voting. To use your voting key, go to §e/warp altar §aand right click the voting altar with it.");
 					Bukkit.getPlayer(args[0]).playSound(Bukkit.getPlayer(args[0]).getLocation(), Sound.LEVEL_UP, 1f, 1f);
 					ItemAPI.givePlayerItems(Bukkit.getPlayer(args[0]));
 					if (Files.getDataFile().contains("Players." + Bukkit.getPlayer(args[0]).getUniqueId() + ".Votes")){
@@ -491,8 +915,9 @@ public class Main extends JavaPlugin {
 				}
 				
 				if (args.length == 2){
+					DeviceType.VOTING_KEY.setDevice(Bukkit.getPlayer(args[1]));
 					DeviceType.VOTING_KEY.addAmount(Integer.parseInt(args[1]), Bukkit.getPlayer(args[0]));
-					Bukkit.getPlayer(args[0]).sendMessage("§a§lThank you §afor voting. To use your voting key, select the §e\"voting key\" §agadget and right click the §e/warp altar §awith it.");
+					Bukkit.getPlayer(args[0]).sendMessage("§a§lThanks §afor voting. To use your voting key, go to §e/warp altar §aand right click the voting altar with it.");
 					Bukkit.getPlayer(args[0]).playSound(Bukkit.getPlayer(args[0]).getLocation(), Sound.LEVEL_UP, 1f, 1f);
 					ItemAPI.givePlayerItems(Bukkit.getPlayer(args[0]));
 				}

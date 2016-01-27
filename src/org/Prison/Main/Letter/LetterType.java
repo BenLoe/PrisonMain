@@ -136,10 +136,6 @@ public enum LetterType {
 					break;
 				}
 			}
-			if (t.i == 21){
-				p.sendMessage("§e[§bCorrupt Guard§e]: §aLooks like your faster then the owners... That cell block isn't created yet.");
-				return;
-			}
 			if (next.getNeeded().attemptFor(p)){
 				Objective o = p.getScoreboard().getObjective(DisplaySlot.SIDEBAR);	
 				Score oldscore = o.getScore(t.name);

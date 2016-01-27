@@ -1,15 +1,17 @@
 package org.Prison.Main.Trails;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
 
-import me.BenLoe.SuperSpleef.Main;
-
 import org.Prison.Main.Files;
+import org.Prison.Main.Main;
 import org.Prison.Main.ParticleEffect;
+import org.Prison.Main.RegionChecker.VisibleLines;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,7 +24,7 @@ import org.bukkit.util.Vector;
 
 public enum ParticleType {
 
-	FIRE, HEART, NOTE, GOLD, DIAMOND, THUNDERSTORM, SEASONAL, HALO, WITCH, HELL, NONE;
+	FIRE, HEART, NOTE, GOLD, DIAMOND, THUNDERSTORM, SEASONAL, HALO, WITCH, HELL, LET_IT, CORRUPT, NONE;
 	
 	public static List<UUID> diamonds = new ArrayList<UUID>();
 	public static List<UUID> gold = new ArrayList<UUID>();
@@ -31,6 +33,8 @@ public enum ParticleType {
 	public static HashMap<String,Double> halo = new HashMap<>();
 	public static HashMap<String,Double> witch = new HashMap<>();
 	public static HashMap<String,Double> witch2 = new HashMap<>();
+	public static HashMap<String,Entry<Double,Double>> corrupt = new HashMap<>();
+	public static HashMap<String,Entry<Double,Double>> corrupt2 = new HashMap<>();
 	
 	public boolean hasBought(Player p){
 		if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Particles")){
@@ -70,9 +74,14 @@ public enum ParticleType {
 	}
 	
 	public void display(final Player p){
+		if (!VisibleLines.in.contains(p.getName()) && !Main.Vanish.contains(p.getName())){
 		Location loc = p.getLocation().clone();
 		Random r = new Random();
 		switch(this){
+		case LET_IT:
+			ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(Material.SNOW_BLOCK, (byte)0), 0.15f, 0.15f, 0.15f, 0.0f, 30, p.getLocation().clone().add(0, 0.1, 0), 30);
+			ParticleEffect.SNOW_SHOVEL.display(0.4f, 0.4f, 0.4f, 0.005f, 50, p.getLocation().clone().add(0, 0.65, 0), 30);
+		break;
 		case DIAMOND:
 			ItemStack toDrop = new ItemStack(Material.AIR);
 			int i = r.nextInt(4) + 1;
@@ -187,10 +196,14 @@ public enum ParticleType {
                      z = 0.4 * (2 * Math.PI - t) * 0.5 * Math.sin(t + phi + i3 * Math.PI);
                      location1.add(x, y, z);
                      if (rbg == 1) {
-                         ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor(1, 0, 0), location1, 7);
+                    	 for (int util = 1; util < 4; util++){
+                         ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor(255, 1, 1), location1, 7);
+                    	 }
                      }
                      if (rbg == 2) {
-                         ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor(255, 69, 0), location1, 7);
+                    	 for (int util = 1; util < 4; util++){
+                         ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor(25, 255, 1), location1, 7);
+                    	 }
                      }
                      location1.subtract(x, y, z);
                  }
@@ -208,10 +221,11 @@ public enum ParticleType {
 		default:
 			break;
 		}
+		}
 	}
 	
-	@SuppressWarnings("unused")
 	public void display1(final Player p){
+		if (!VisibleLines.in.contains(p.getName()) && !Main.Vanish.contains(p.getName())){
 		Location loc = p.getLocation().clone();
 		switch(this){
 		case WITCH:
@@ -312,9 +326,84 @@ public enum ParticleType {
         	halo.put(p.getName(), 0.0);
         }
 			break;
+		case CORRUPT:{
+			if (corrupt.containsKey(p.getName()) && corrupt2.containsKey(p.getName())){
+	            Random r = new Random();
+ 				int points = 15;
+ 				double i = corrupt.get(p.getName()).getValue();
+ 				double height = corrupt.get(p.getName()).getKey();
+ 				final double size = 0.8;
+ 	            i += 1;
+ 	            double angle = (i * Math.PI / 180);
+ 	            double x = size * Math.cos(angle);
+ 	            double z = size * Math.sin(angle);
+	            
+ 	            loc.add(x, height, z);
+ 	            
+ 	           if ((new Random().nextInt(2) + 1) == 1){
+ 	        	   for (int util = 1; util <= 6; util++){
+					ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor(17, 106, 158), loc, 15);
+ 	        	   }
+				}else{
+					for (int util = 1; util <= 6; util++){
+					ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor(1, 1, 1), loc, 15);
+					}
+				}
+ 	            loc.subtract(x, height, z);
+ 	            if (i >= 361) {
+ 	                i = 0 + 361 / points;
+ 	            } else {
+ 	                i += 361 / points;
+ 	            }
+ 	            double i2 = corrupt2.get(p.getName()).getValue();
+ 	            double height2 = corrupt2.get(p.getName()).getKey();
+ 	            i2 += 1;
+	            double angle2 = (i2 * Math.PI / 180);
+	            double x2 = size * Math.cos(angle2);
+	            double z2 = size * Math.sin(angle2);
+	            
+	            loc.add(x2, height2, z2);
+	            if ((new Random().nextInt(2) + 1) == 1){
+	 	        	   for (int util = 1; util <= 6; util++){
+	 	        		   ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor(17, 106, 158), loc, 15);
+	 	        	   }
+					}else{
+						for (int util = 1; util <= 6; util++){
+							ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor(1, 1, 1), loc, 15);
+						}
+					}
+	            loc.subtract(x2, height2, z2);
+	            if (i2 <= 0) {
+	                i2 = 360 - (360 / points);
+	            } else {
+	                i2 -= 350 / points;
+	            }
+	            corrupt.remove(p.getName());
+	            if ((r.nextInt(7) + 1) == 1){
+	    			double newheight = (0.2 + (1.4 - 0.2) * new Random().nextDouble());
+	    			corrupt.put(p.getName(), new AbstractMap.SimpleEntry<Double, Double>(newheight, i));
+	            }else{
+	            	corrupt.put(p.getName(), new AbstractMap.SimpleEntry<Double, Double>(height, i));
+	            }
+	            corrupt2.remove(p.getName());
+	            if ((r.nextInt(7) + 1) == 1){
+	    			double newheight = (0.2 + (1.4 - 0.1) * new Random().nextDouble());
+	    			corrupt2.put(p.getName(), new AbstractMap.SimpleEntry<Double, Double>(newheight, i2));
+	            }else{
+	            	corrupt2.put(p.getName(), new AbstractMap.SimpleEntry<Double, Double>(height2, i2));
+	            }
+	            ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(Material.ENDER_CHEST, (byte)0), 0.1f, 0.05f, 0.1f, 0.01f, 6, p.getLocation().clone().add(0, 0.1, 0), 15);
+ 	        }else{
+ 	        	Entry<Double,Double> e1 = new AbstractMap.SimpleEntry<Double, Double>(0.3, 0.0);
+ 	        	Entry<Double,Double> e2 = new AbstractMap.SimpleEntry<Double, Double>(1.5, 190.0);
+ 	        	corrupt.put(p.getName(), e1);
+ 	        	corrupt2.put(p.getName(), e2);
+ 	        }
+		}
 		default:
 			break;
 		
+		}
 		}
 	}
 }

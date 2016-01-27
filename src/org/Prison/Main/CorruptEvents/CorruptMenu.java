@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.BenLoe.quest.QuestAPI;
+import net.md_5.bungee.api.ChatColor;
 
+import org.Prison.Main.Files;
 import org.Prison.Main.Main;
 import org.Prison.Main.ParticleEffect;
 import org.Prison.Main.Currency.MoneyAPI;
@@ -43,23 +45,22 @@ public class CorruptMenu {
 		List<String> lore = new ArrayList<>();
 		lore.add("");
 		lore.add("§7This shard is said to be able to bring you");
-		lore.add("§7to the corrupt pit when activated.");
+		lore.add("§7to the corrupt pit when activated. §7§o(One time purchase)");
 		lore.add("");
 		lore.add("§cWarning: The corrupt pit is not a place for");
 		lore.add("§cweak players, damage is enabled and strong mobs");
 		lore.add("§cspawn. Armor and weapons are needed.");
 		lore.add("");
 		lore.add("§7Cost:");
-		lore.add("§e5 favor points.");
-		lore.add("§a500,000$");
-		if (MoneyAPI.getMoney(p) >= 500000 && QuestAPI.getFavor(p) >= 5){
+		lore.add("§e25 favor points.");
+		lore.add("§a1,000,000$");
+		if (MoneyAPI.getMoney(p) >= 1000000 && QuestAPI.getFavor(p) >= 25){
 			lore.add("§aClick to buy 1 corrupt shard.");
 		}else{
 			lore.add("§cClick to buy 1 corrupt shard.");
 		}
 		itemm.setLore(lore);
 		itemm.setDisplayName("§4§l§khh§4§l Corrupt Shard §4§l§khh");
-		itemm.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		item.setItemMeta(itemm);
 		item.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 10);
 		inv.setItem(13, item);
@@ -68,16 +69,16 @@ public class CorruptMenu {
 	}
 	
 	public static void wasClicked(Player p){
-		if (MoneyAPI.getMoney(p) >= 500000 && QuestAPI.getFavor(p) >= 5){
-			MoneyAPI.removeMoney(p, 500000);
-			QuestAPI.removeFavor(p, 5);
+		if (MoneyAPI.getMoney(p) >= 1000000 && QuestAPI.getFavor(p) >= 25){
+			MoneyAPI.removeMoney(p, 1000000);
+			QuestAPI.removeFavor(p, 25);
 			p.sendMessage("§7[§3Shady Inmate§7]: §aI wish you luck. §a§o(Shard purchased)");
 			ItemStack item = new ItemStack(Material.PRISMARINE_SHARD);
 			ItemMeta itemm = item.getItemMeta();
 			List<String> lore = new ArrayList<>();
 			lore.add("");
 			lore.add("§7This shard is said to be able to bring you");
-			lore.add("§7to the corrupt pit when activated. §7§o(Round trip)");
+			lore.add("§7to the corrupt pit when activated. §7§o(One time purchase)");
 			lore.add("");
 			lore.add("§cWarning: The corrupt pit is not a place for");
 			lore.add("§cweak players, damage is enabled and strong mobs");
@@ -92,12 +93,17 @@ public class CorruptMenu {
 			p.updateInventory();
 			inMenu.remove(p.getName());
 			p.closeInventory();
+			Files.getDataFile().set("Players." + p.getUniqueId().toString() + ".CorruptAcess", true);
+			Files.saveDataFile();
 		}else{
 			p.playSound(p.getLocation(), Sound.NOTE_BASS, 1f, 1f);
 		}
 	}
 	
 	public static void teleport(final Player p){
+		if (Files.getDataFile().contains("Players." + p.getUniqueId().toString() + ".CorruptAcess")){
+			p.sendMessage(ChatColor.RED + "You've never bought a corrupt shard so you can't use one.");
+		}
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, 12));
 		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 5 * 20, -20));
 		p.playSound(p.getLocation(), Sound.PORTAL, 1f, 1f);

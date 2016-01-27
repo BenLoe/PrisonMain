@@ -30,7 +30,7 @@ public class PlayerMoveListenener implements Listener{
 	@EventHandler
 	public void PlayerMove(PlayerMoveEvent event){
 		final Player p = event.getPlayer();
-		if (p.getWorld().getName().equals("PrisonMap") && !Game.playerInGame(p)){
+		if (p.getWorld().getName().equals("PrisonMap") && !Game.playerInGame(p) && !org.Prison.Lucky.Game.playerInGame(p)){
 			SpeedTrait.checkLevelUp(p);
 		}
 		if (!PlayerMode.isInPlayerMode(p)){
@@ -43,48 +43,48 @@ public class PlayerMoveListenener implements Listener{
 					p.teleport(event.getFrom());
 				}
 			}
-			if (!p.getWorld().getName().equals("PVP") && event.getTo().getBlockY() < 6 && p.getLocation().clone().subtract(0, 1, 0).getBlock().getType() == Material.GRASS){
+			if (!p.getWorld().getName().equals("PVP") && !p.getWorld().getName().equals("Build") && event.getTo().getBlockY() < 6 && p.getLocation().clone().subtract(0, 1, 0).getBlock().getType() == Material.GRASS){
 				p.teleport(Main.getLocation("spawn"));
 				p.sendMessage(ChatColor.YELLOW + "You got out of the map so we teleported you back, your welcome.");
 			}
 		}
 		if (Main.Tutorialint.containsKey(p.getName())){
-		if (!(event.getFrom() == event.getTo())){
-			p.teleport(event.getFrom());
-		}
+			if (!(event.getFrom() == event.getTo())){
+				p.teleport(event.getFrom());
+			}
 		}
 		if (!p.getGameMode().equals(GameMode.CREATIVE)){
-		if ((RankType.getRank(p).equals(RankType.ELITE) || RankType.getRank(p).equals(RankType.JRMOD) || RankType.getRank(p).equals(RankType.MODERATOR) || RankType.getRank(p).equals(RankType.ADMIN) || RankType.getRank(p).equals(RankType.OWNER) || RankType.getRank(p).equals(RankType.ULTRA))){
-			if (Game.ingame.contains(p.getName()) || Game.watching.contains(p.getName()) || CorruptMenu.teleporting.contains(p.getName())){
-				p.setAllowFlight(false);
-			}else
-			if (p.getLocation().subtract(0, 1, 0).getBlock().getType() != Material.AIR && !p.getWorld().getName().equals("PVP")){
-				p.setAllowFlight(true);
+			if ((RankType.getRank(p).equals(RankType.ELITE) ||RankType.getRank(p).equals(RankType.BUILDER) || RankType.getRank(p).equals(RankType.JRMOD) || RankType.getRank(p).equals(RankType.MODERATOR) || RankType.getRank(p).equals(RankType.ADMIN) || RankType.getRank(p).equals(RankType.OWNER) || RankType.getRank(p).equals(RankType.ULTRA))){
+				if (org.Prison.Lucky.Game.ingame.contains(p.getName()) || org.Prison.Lucky.Game.watching.contains(p.getName()) || Game.ingame.contains(p.getName()) || Game.watching.contains(p.getName()) || CorruptMenu.teleporting.contains(p.getName())){
+					p.setAllowFlight(false);
+				}else
+					if (p.getLocation().subtract(0, 1, 0).getBlock().getType() != Material.AIR && !p.getWorld().getName().equals("PVP")){
+						p.setAllowFlight(true);
+					}
+			}else{
+				if (p.getAllowFlight()){
+					p.setAllowFlight(false);
+				}
 			}
-		}else{
-			if (p.getAllowFlight()){
-				p.setAllowFlight(false);
-			}
-		}
 		}
 		if (p.getWorld().getName().equals("NetherMap")){
 			if (p.getLocation().clone().subtract(0, 1, 0).getBlock().getType() == Material.OBSIDIAN &&  p.getLocation().getBlockY() > 55){
 				Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), new Runnable(){
 					public void run(){
-				p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, 12));
-				p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 5 * 20, -20));
-				ParticleEffect.PORTAL.display(0.5f, 1f, 0.5f, 0.3f, 50, p.getLocation(), 20);
-				CorruptMenu.teleporting.add(p.getName());
-				Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), new Runnable(){
-					public void run(){
-						CorruptMenu.teleporting.remove(p.getName());
-						p.teleport(Main.getLocation("spawn"));
-						p.playSound(p.getLocation(), Sound.PORTAL_TRAVEL, 0.5f, 1f);
+						p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, 12));
+						p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 5 * 20, -20));
+						ParticleEffect.PORTAL.display(0.5f, 1f, 0.5f, 0.3f, 50, p.getLocation(), 20);
+						CorruptMenu.teleporting.add(p.getName());
+						Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), new Runnable(){
+							public void run(){
+								CorruptMenu.teleporting.remove(p.getName());
+								p.teleport(Main.getLocation("spawn"));
+								p.playSound(p.getLocation(), Sound.PORTAL_TRAVEL, 0.5f, 1f);
+							}
+						}, 4 * 20l);
 					}
-				}, 4 * 20l);
+				}, 20l);
 			}
-			}, 20l);
-		}
 		}
 	}
 }

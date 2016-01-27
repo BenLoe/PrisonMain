@@ -1,10 +1,14 @@
 package org.Prison.Main.Ranks;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 
 public enum RankType {
 
-	VIP, ADMIN, OWNER, ELITE, ULTRA, MODERATOR, JRMOD, NONE;
+	VIP, ADMIN, OWNER, ELITE, ULTRA, MODERATOR, JRMOD, BUILDER, NONE;
 	
 	
 
@@ -17,6 +21,8 @@ public enum RankType {
 			return RankType.MODERATOR;
 		}else if(p.hasPermission("Rank.JrMod")){
 			return RankType.JRMOD;
+		}else if (p.hasPermission("Rank.Builder")){
+			return RankType.BUILDER;
 		}else if(p.hasPermission("Rank.Ultra")){
 			return RankType.ULTRA;
 		}else if (p.hasPermission("Rank.Elite")){
@@ -53,6 +59,9 @@ public enum RankType {
 		case JRMOD:{
 			return "§4§lJR.MOD";
 		}
+		case BUILDER:{
+			return "§9§lBUILDER";
+		}
 		}
 		return null;
 	}
@@ -83,7 +92,46 @@ public enum RankType {
 		case JRMOD:{
 			return "§4";
 		}
+		case BUILDER:{
+			return "§9";
+		}
 		}
 		return null;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void setPlayerName(Player p){
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		Scoreboard board = manager.getMainScoreboard();
+		Team team = board.getTeam("Normal");
+		switch(this){
+		case ADMIN:
+			team = board.getTeam("Admin");
+			break;
+		case ELITE:
+			team = board.getTeam("Elite");
+			break;
+		case JRMOD:
+			team = board.getTeam("JrMod");
+			break;
+		case MODERATOR:
+			team = board.getTeam("Mod");
+			break;
+		case NONE:
+			break;
+		case OWNER:
+			team = board.getTeam("Owner");
+			break;
+		case ULTRA:
+			team = board.getTeam("Ultra");
+			break;
+		case VIP:
+			team = board.getTeam("Vip");
+			break;
+		default:
+			break;
+		
+		}
+		team.addPlayer(Bukkit.getOfflinePlayer(p.getName()));
 	}
 }

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import me.BenLoe.Gadgets.Types.DeviceType;
 import me.BenLoe.Gadgets.Types.PartyGun;
 import me.BenLoe.SuperSpleef.Game;
 import me.BenLoe.quest.ActiveQuest;
@@ -18,8 +19,8 @@ import org.Prison.Friends.FriendAPI;
 import org.Prison.Main.Booster.BoosterAPI;
 import org.Prison.Main.Booster.BoosterCooldown;
 import org.Prison.Main.CorruptEvents.CorruptMenu;
-import org.Prison.Main.CorruptEvents.FireRain;
 import org.Prison.Main.CorruptEvents.GhastTerror;
+import org.Prison.Main.Currency.MoneyAPI;
 import org.Prison.Main.Enchanter.ClickHandler;
 import org.Prison.Main.Enchanter.SellMenu;
 import org.Prison.Main.ItemBuyer.ItemBuyerMenu;
@@ -28,9 +29,11 @@ import org.Prison.Main.Letter.LetterType;
 import org.Prison.Main.Menu.CrafterMenu;
 import org.Prison.Main.Menu.MenuType;
 import org.Prison.Main.Menu.MonthMenu;
+import org.Prison.Main.Menu.SantaMenu;
 import org.Prison.Main.Ranks.RankType;
 import org.Prison.Main.RegionChecker.DonatorCellLine;
 import org.Prison.Main.Storage.TonyGMenu;
+import org.Prison.Main.Trails.ParticleType;
 import org.Prison.Main.Tutorial.Tutorial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,7 +46,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
@@ -56,11 +58,13 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -71,7 +75,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -86,6 +92,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 
+import com.gmail.filoghost.holograms.api.Hologram;
+import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
+
 
 @SuppressWarnings("deprecation")
 public class Events implements Listener{
@@ -93,6 +102,51 @@ public class Events implements Listener{
 	public static Main plugin;
 	public Events(Main instance){
 		plugin = instance;
+	}
+	
+	@EventHandler
+	public void WorldChange(PlayerChangedWorldEvent event){
+		if (event.getPlayer().hasPermission("Build.Build")){
+			if (!event.getPlayer().isOp()){
+				event.getPlayer().setGameMode(GameMode.SURVIVAL);
+			}
+			if (event.getPlayer().getWorld().getName().equals("Build")){
+				event.getPlayer().getInventory().setItem(7, null);
+				event.getPlayer().getInventory().setItem(8, null);
+				event.getPlayer().updateInventory();
+				event.getPlayer().setWalkSpeed(0.2f);
+				event.getPlayer().setGameMode(GameMode.CREATIVE);
+			}else{
+				ItemAPI.givePlayerItems(event.getPlayer());
+			}
+		}else{
+			if (event.getPlayer().getWorld().getName().equals("Build")){
+				event.getPlayer().teleport(Main.getLocation("Spawn"));
+			}
+		}
+	}
+	
+	@EventHandler
+	public void command(PlayerCommandPreprocessEvent event){
+		if (Game.playerInGame(event.getPlayer()) || org.Prison.Lucky.Game.playerInGame(event.getPlayer())){
+			if (event.getMessage().contains("/warp") || event.getMessage().contains("/warps") || event.getMessage().contains("/tolocation")){
+				event.setCancelled(true);
+			}
+		}
+		if (event.getMessage().contains("/help")){
+			
+		}
+		if (event.getMessage().equalsIgnoreCase("/build")){
+			event.setCancelled(true);
+			Player p = event.getPlayer();
+			if (p.hasPermission("Build.Build")){
+				p.teleport(new Location(Bukkit.getWorld("Build"), 88.5, 23, 15.5));
+			}
+		}
+		if (event.getMessage().contains("/rankup")){
+			event.setCancelled(true);
+			event.getPlayer().teleport(Main.getLocation("CorruptCop"));
+		}
 	}
 	
 	@EventHandler
@@ -119,16 +173,29 @@ public class Events implements Listener{
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void playerDamageEvent(EntityDamageByEntityEvent event){
-		if (event.getEntity() instanceof PigZombie && event.getDamager() instanceof Player){
+		if ((event.getEntity() instanceof PigZombie || event.getEntity() instanceof Skeleton) && event.getDamager() instanceof Player && event.getDamager().getWorld().getName().equals("NetherMap")){
 			LivingEntity e = (LivingEntity) event.getEntity();
 			Player p = (Player) event.getDamager();
 			if (event.getDamage() >= e.getHealth()){
 				p.setExp(p.getExp() + 0.02f);
-				if ((new Random().nextInt(4) + 1) == 1){
-					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 0.6f, 1f);
+				int amount = 0;
+				int needed = 0;
+				if (LetterType.getPlayerLetter(p) == LetterType.A){
+					needed = 2000;
+				}else{
+					needed = LetterType.getPlayerLetter(p).getNeeded().getMoney();
 				}
+				amount = getRandom(Math.round(needed / 700), Math.round(needed / 500));
+				final Hologram h = HolographicDisplaysAPI.createHologram(Main.getPlugin(Main.class),e.getLocation().clone().add(0, 1.9, 0) , ChatColor.GREEN + "+" + amount + "$");
+				MoneyAPI.addMoney(p, amount);
+				Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), new Runnable(){
+					public void run(){
+						h.delete();
+					}
+				}, 20l);
 				if ((new Random().nextInt(100) + 1) == 1){
 					p.sendMessage(ChatColor.GREEN + "Found: " + ChatColor.YELLOW + "Corrupt Chest.");
+					DeviceType.CORRUPT_CHEST.addAmount(1, p);
 				}
 			}
 		}
@@ -137,7 +204,7 @@ public class Events implements Listener{
 			Player damager = (Player) event.getDamager();
 			if (QuestAPI.hasAActive(damager)){
 				ActiveQuest aq = ActiveQuest.getActive(damager);
-				if (aq.getNeededType() == NeededType.HIT_GUARD && aq.getNeededAmount() >= QuestAPI.getProgress(p)){
+				if (aq.getNeededType() == NeededType.HIT_GUARD && aq.getNeededAmount() >= QuestAPI.getProgress(damager)){
 					if (RankType.getRank(p).equals(RankType.MODERATOR) || RankType.getRank(p).equals(RankType.JRMOD) || RankType.getRank(p).equals(RankType.ADMIN)|| RankType.getRank(p).equals(RankType.OWNER)){
 						if (Main.guard.containsKey(damager.getName())){
 							damager.sendMessage("§cYou punched a guard recently, please wait another " + Main.guard.get(damager.getName()) + " seconds.");
@@ -149,7 +216,7 @@ public class Events implements Listener{
 						damager.playSound(p.getLocation(), Sound.EXPLODE, 1f, 1f);
 						p.setVelocity(damager.getLocation().getDirection().multiply(0.5));
 						QuestAPI.addProgress(damager, 1);
-						Main.guard.put(damager.getName(), 120);
+						Main.guard.put(damager.getName(), 60);
 						}
 					}
 				}
@@ -267,16 +334,23 @@ public class Events implements Listener{
 			Inventory inv = Bukkit.createInventory(null, 54, "§d§lCrafter");
 			CrafterMenu.open(p, inv);
 		}
+		if (event.getNPC().getId() == 183){
+			SantaMenu.open(p);
+		}
 	}
 	
 	@EventHandler
-	public void dropItem(PlayerDropItemEvent event){
-		if (!PlayerMode.isInPlayerMode(event.getPlayer())){
-		if (event.getPlayer().getInventory().getHeldItemSlot() == 7 || event.getPlayer().getInventory().getHeldItemSlot() == 8){
-		event.setCancelled(true);
+	public void dropItem(final PlayerDropItemEvent event){
+		if (!PlayerMode.isInPlayerMode(event.getPlayer()) && !org.Prison.Lucky.Game.playerInGame(event.getPlayer())){
+			if (event.getPlayer().getInventory().getHeldItemSlot() == 7 || event.getPlayer().getInventory().getHeldItemSlot() == 8){
+				event.setCancelled(true);
+			}
 		}
+		if (Game.playerInGame(event.getPlayer())){
+			event.setCancelled(true);
 		}
 	}
+	
 	@EventHandler
 	public void PickupItem(PlayerPickupItemEvent event){
 		Player p = event.getPlayer();
@@ -304,7 +378,7 @@ public class Events implements Listener{
 	
 	@EventHandler
 	public void joinEvent(PlayerJoinEvent event){
-		new JoinEvent().Join(event);
+		JoinEvent.Join(event);
 	}
 	
 	@EventHandler
@@ -323,8 +397,45 @@ public class Events implements Listener{
 				p.sendMessage(ChatColor.YELLOW + event.getPlayer().getName() + " left the server.");
 			}
 		}
+		Player p = event.getPlayer();
 		if (Main.Tutorialint.containsKey(event.getPlayer().getName())){
 			Main.Tutorialint.remove(event.getPlayer().getName());
+		}
+		if (Main.bookshelf.containsKey(p.getName())){
+			Main.bookshelf.remove(p.getName());
+		}
+		if (Main.bookshelfBlock.containsKey(p.getName())){
+			Main.bookshelfBlock.remove(p.getName());
+		}
+		if (Main.antibook.containsKey(p.getName())){
+			Main.antibook.remove(p.getName());
+		}
+		if (Main.wood.containsKey(p.getName())){
+			Main.wood.remove(p.getName());
+		}
+		if (Main.woodBlock.containsKey(p.getName())){
+			Main.woodBlock.remove(p.getName());
+		}
+		if (Main.Vanish.contains(p.getName())){
+			Main.Vanish.remove(p.getName());
+		}
+		if (ParticleType.corrupt.containsKey(p.getName())){
+			ParticleType.corrupt.remove(p.getName());
+		}
+		if (ParticleType.corrupt2.containsKey(p.getName())){
+			ParticleType.corrupt2.remove(p.getName());
+		}
+		if (ParticleType.halo.containsKey(p.getName())){
+			ParticleType.halo.remove(p.getName());
+		}
+		if (ParticleType.witch.containsKey(p.getName())){
+			ParticleType.witch.remove(p.getName());
+		}
+		if (ParticleType.witch2.containsKey(p.getName())){
+			ParticleType.witch2.remove(p.getName());
+		}
+		if (ParticleType.seasonal.containsKey(p.getName())){
+			ParticleType.seasonal.remove(p.getName());
 		}
 	}
 	@EventHandler
@@ -371,9 +482,9 @@ public class Events implements Listener{
 	@EventHandler
 	public void startFlying(PlayerToggleFlightEvent event){
 		Player p = event.getPlayer();
-		if (!p.getGameMode().equals(GameMode.CREATIVE)){
-			if ((RankType.getRank(p).equals(RankType.ELITE) || RankType.getRank(p).equals(RankType.JRMOD) || RankType.getRank(p).equals(RankType.MODERATOR) || RankType.getRank(p).equals(RankType.ADMIN) || RankType.getRank(p).equals(RankType.OWNER) || RankType.getRank(p).equals(RankType.ULTRA))){
-				if (!p.getWorld().getName().equals("PVP") && !Game.ingame.contains(p.getName()) && !Game.watching.contains(p.getName())){
+		if (!p.getGameMode().equals(GameMode.CREATIVE) && !p.getGameMode().equals(GameMode.SPECTATOR)){
+			if ((RankType.getRank(p).equals(RankType.ELITE) || RankType.getRank(p).equals(RankType.BUILDER) || RankType.getRank(p).equals(RankType.JRMOD) || RankType.getRank(p).equals(RankType.MODERATOR) || RankType.getRank(p).equals(RankType.ADMIN) || RankType.getRank(p).equals(RankType.OWNER) || RankType.getRank(p).equals(RankType.ULTRA))){
+				if (!p.getWorld().getName().equals("PVP") && !Game.ingame.contains(p.getName()) && !Game.watching.contains(p.getName()) && !org.Prison.Lucky.Game.ingame.contains(p.getName()) && !org.Prison.Lucky.Game.watching.contains(p.getName())){
 				p.setVelocity(p.getLocation().getDirection().multiply(2.6).setY(p.getVelocity().getY() + 1.2));
 				p.playSound(p.getLocation(), Sound.BAT_TAKEOFF, 1.0f, 1.0f);
 				p.setFlying(false);
@@ -398,18 +509,15 @@ public class Events implements Listener{
 				event.setCancelled(true);
 			}
 		}
-		if (event.getEntity() instanceof Creeper){
-			Creeper creeper = (Creeper) event.getEntity();
-			if (FireRain.wolfs.contains(creeper.getUniqueId())){
-				event.setCancelled(true);
-			}
-		}
 		if (event.getEntity() instanceof Player && event.getEntity().getWorld().getName().equals("NetherMap")){
 			if (event.getCause() == DamageCause.FALL || event.getCause() == DamageCause.SUFFOCATION){
 				event.setCancelled(true);
 			}
 		}
 		if (event.getEntity() instanceof Sheep && Main.sheeps.contains(event.getEntity().getUniqueId())){
+			event.setCancelled(true);
+		}
+		if (event.getEntity() instanceof Player && event.getEntity().getWorld().getName().equals("Build")){
 			event.setCancelled(true);
 		}
 	}
@@ -561,4 +669,7 @@ public class Events implements Listener{
 		}
 		fw.setFireworkMeta(fwm);
 		}
+	public static int getRandom(int min, int max){
+		return new Random().nextInt(max - min) + min;
+	}
 }

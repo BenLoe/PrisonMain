@@ -6,6 +6,7 @@ import java.util.List;
 
 import me.BenLoe.Blackmarket.Stats.Stats;
 import me.BenLoe.Gadgets.Menu.GadgetMenu;
+import me.BenLoe.Gadgets.Types.SantaMorph;
 import me.BenLoe.quest.QuestAPI;
 import me.BenLoe.quest.Menu.QuestMenu;
 
@@ -94,7 +95,7 @@ public enum MenuItem {
 		
 	PARTICLE_SEASONAL("PARTICLE_SEASONAL", 32, MenuType.PARTICLE_MENU),
 	
-	PARTICLE_HELL("PARTICLE_HELL", 31, MenuType.PARTICLE_MENU),
+	PARTICLE_HELL("PARTICLE_HELL", 30, MenuType.PARTICLE_MENU),
 	
 	PARTICLE_HEART("PARTICLE_HEART", 19, MenuType.PARTICLE_MENU),
 	
@@ -108,9 +109,13 @@ public enum MenuItem {
 	
 	PARTICLE_DIAMOND("PARTICLE_DIAMOND", 23, MenuType.PARTICLE_MENU),
 	
-	PARTICLE_THUNDER("PARTICLE_THUNDER", 30, MenuType.PARTICLE_MENU),
+	PARTICLE_THUNDER("PARTICLE_THUNDER", 29, MenuType.PARTICLE_MENU),
+	
+	PARTICLE_LET("PARTICLE_LET", 33, MenuType.PARTICLE_MENU),
 	
 	PARICLE_WITCH("PARTICLE_WITCH", 25, MenuType.PARTICLE_MENU),
+	
+	PARTICLE_CORRUPT("PARTICLE_CORRUPT", 31, MenuType.PARTICLE_MENU),
 	
 	MONTH_VIP("MONTH_VIP", 11, MenuType.MONTH),
 	
@@ -159,7 +164,22 @@ public enum MenuItem {
 	CRAFTER_SPE_SHOW("CRAFTER_SPE_SHOW", 51, MenuType.CRAFTER),
 	
 	CRAFTER_SPE_UP("CRAFTER_SPE_UP", 52, MenuType.CRAFTER),
-	;
+	
+	SANTA_DAILY("SANTA_DAILY", 11, MenuType.SANTA),
+	
+	SANTA_SECRET("SANTA_SECRET", 13, MenuType.SANTA),
+	
+	SANTA_WISH("SANTA_WISH", 15, MenuType.SANTA),
+	
+	SANTA_PICK_CORRUPT("SANTA_PICK_CORRUPT", 10, MenuType.SANTA_PICK),
+	
+	SANTA_PICK_ULTRA("SANTA_PICK_ULTRA", 12, MenuType.SANTA_PICK),
+	
+	SANTA_PICK_FREE("SANTA_PICK_FREE", 14, MenuType.SANTA_PICK),
+	
+	SANTA_PICK_CURRENCY("SANTA_PICK_CURRENCY", 16, MenuType.SANTA_PICK),
+	
+	SANTA_PICK_COLLECT("SANTA_PICK_COLLECT", 31, MenuType.SANTA_PICK);
 	
 	
 	private final String name;
@@ -357,7 +377,6 @@ public enum MenuItem {
 					lore.add(ChatColor.GRAY + " Speed: " + ChatColor.YELLOW + "+" + String.valueOf((int)stats.getSpeed()));
 					lore.add(ChatColor.GREEN + " Enchants Left: " + ChatColor.YELLOW + "0");
 					itemm.setLore(lore);
-					itemm.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 					item.setItemMeta(itemm);
 					item.addUnsafeEnchantment(Enchantment.DIG_SPEED, stats.getEfficiency());
 					item.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, stats.getFortune());
@@ -591,6 +610,16 @@ public enum MenuItem {
 			}
 		}
 		break;
+		case "PARTICLE_LET":{
+			if (ParticleType.LET_IT.hasBought(p) || p.isOp()){
+				p.sendMessage("§aYou now have the Let it Snow particle effect active.");
+				ParticleType.LET_IT.setActive(p);
+				p.closeInventory();
+			}else{
+				p.sendMessage("§cYou must unlock this particle in a present given by santa.");
+			}
+		}
+		break;
 		case "PARTICLE_HELL":{
 			if (ParticleType.HELL.hasBought(p) || p.isOp()){
 				p.sendMessage("§aYou now have the Hell's Charge particle effect active.");
@@ -681,6 +710,16 @@ public enum MenuItem {
 			}
 		}
 		break;
+		case "PARTICLE_CORRUPT":{
+			if (ParticleType.CORRUPT.hasBought(p) || p.isOp()){
+				p.sendMessage("§aYou now have the Corrupt particle effect active.");
+				ParticleType.CORRUPT.setActive(p);
+				p.closeInventory();
+			}else{
+				p.sendMessage("§cYou must unlock this particle effect in a Corrupt chest.");
+			}
+		}
+		break;
 		case "MONTH_VIP":{
 			Calendar c = Calendar.getInstance();
 			int currentmonth = c.get(Calendar.MONTH);
@@ -688,6 +727,14 @@ public enum MenuItem {
 				if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".VIP" + currentmonth)){
 					p.playSound(p.getLocation(), Sound.NOTE_BASS, 1f, 1f);
 				}else{
+					if (!Main.monthly){
+						Main.monthly = true;
+						Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), new Runnable(){
+							public void run(){
+								Main.monthly = false;
+							}
+						}, 50l);
+					}
 					p.closeInventory();
 					p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 1f);
 					CrystalAPI.addCrystals(p, 2000);
@@ -712,6 +759,14 @@ public enum MenuItem {
 				if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".ELITE" + currentmonth)){
 					p.playSound(p.getLocation(), Sound.NOTE_BASS, 1f, 1f);
 				}else{
+					if (!Main.monthly){
+						Main.monthly = true;
+						Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), new Runnable(){
+							public void run(){
+								Main.monthly = false;
+							}
+						}, 50l);
+					}
 					p.closeInventory();
 					p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 1f);
 					CrystalAPI.addCrystals(p, 2000);
@@ -733,9 +788,17 @@ public enum MenuItem {
 			Calendar c = Calendar.getInstance();
 			int currentmonth = c.get(Calendar.MONTH);
 			if (RankType.getRank(p) != RankType.NONE && RankType.getRank(p) != RankType.VIP && RankType.getRank(p) != RankType.ELITE){
-				if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".ULTRA" + currentmonth)){
+				if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".ULTRA" + currentmonth) && !p.isOp()){
 					p.playSound(p.getLocation(), Sound.NOTE_BASS, 1f, 1f);
 				}else{
+					if (!Main.monthly){
+						Main.monthly = true;
+						Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), new Runnable(){
+							public void run(){
+								Main.monthly = false;
+							}
+						}, 50l);
+					}
 					p.closeInventory();
 					p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 1f);
 					CrystalAPI.addCrystals(p, 2000);
@@ -752,8 +815,112 @@ public enum MenuItem {
 				p.sendMessage("§6§lULTRA§c's gain 6000 crystals every month. To purchase Ultra go to §bwww.ThePitMc.com§c.");
 			}
 		}
+		break;
+		case "SANTA_DAILY":{
+			Calendar c = Calendar.getInstance();
+			int day = c.get(Calendar.DAY_OF_YEAR);
+			int pday = -10;
+			if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Daily")){
+				pday = Files.getDataFile().getInt("Players." + p.getUniqueId() + ".Daily");
+			}
+			if (day != pday){
+				int empties = 0;
+				for (ItemStack item : p.getInventory().getContents()){
+					if (item == null){
+						empties = empties + 1;
+						
+					}
+				}
+				if (empties < 1){
+					p.sendMessage("§cYou dont have any free item slots.");
+					return;
+				}
+				ItemStack presents = SantaMorph.getRandomPresent();
+				ItemMeta itemm = presents.getItemMeta();
+				itemm.setDisplayName("§b§lPresent §7(Right click altar)");
+				presents.setItemMeta(itemm);
+				presents.setAmount(2);
+				p.getInventory().addItem(presents);
+				p.sendMessage("§2§l[§4§lSanta§2§l]: §bHere's your 2 daily presents!");
+				p.updateInventory();
+				p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 1f);
+				p.closeInventory();
+				Files.getDataFile().set("Players." + p.getUniqueId() + ".Daily", day);
+				Files.saveDataFile();
+			}else{
+				p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1f, 1f);
+			}
+		}
+		break;
+		case "SANTA_SECRET":{
+			Calendar c = Calendar.getInstance();
+			int day = c.get(Calendar.DAY_OF_YEAR);
+			int pday = -10;
+			if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Secret")){
+				pday = Files.getDataFile().getInt("Players." + p.getUniqueId() + ".Secret");
+			}
+			if (day != pday){
+				p.sendMessage("§2§l[§4§lSanta§2§l]: §bTo send someone a secret santa gift of 1 present, do §e/SecretSanta (name)§b!");
+				p.playSound(p.getLocation(), Sound.ITEM_PICKUP, 1f, 1f);
+				p.closeInventory();
+			}else{
+				p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1f, 1f);
+			}
+		}
+		break;
+		case "SANTA_PICK_CORRUPT":{
+			if (!PresentType.getKit(p).equals(PresentType.CORRUPT)){
+				PresentType.CORRUPT.setKit(p);
+				p.playSound(p.getLocation(), Sound.SUCCESSFUL_HIT, 1f, 1f);
+				createMenu(p.getOpenInventory().getTopInventory(), MenuType.SANTA_PICK, p);
+			}
+		}
+		break;
+		case "SANTA_PICK_ULTRA":{
+			if (!PresentType.getKit(p).equals(PresentType.ULTRA)){
+				PresentType.ULTRA.setKit(p);
+				p.playSound(p.getLocation(), Sound.SUCCESSFUL_HIT, 1f, 1f);
+				createMenu(p.getOpenInventory().getTopInventory(), MenuType.SANTA_PICK, p);
+			}
+		}
+		break;
+		case "SANTA_PICK_FREE":{
+			if (!PresentType.getKit(p).equals(PresentType.FREE_RANKUP)){
+				PresentType.FREE_RANKUP.setKit(p);
+				p.playSound(p.getLocation(), Sound.SUCCESSFUL_HIT, 1f, 1f);
+				createMenu(p.getOpenInventory().getTopInventory(), MenuType.SANTA_PICK, p);
+			}
+		}
+		break;
+		case "SANTA_PICK_CURRENCY":{
+			if (!PresentType.getKit(p).equals(PresentType.CURRENCY)){
+				PresentType.CURRENCY.setKit(p);
+				p.playSound(p.getLocation(), Sound.SUCCESSFUL_HIT, 1f, 1f);
+				createMenu(p.getOpenInventory().getTopInventory(), MenuType.SANTA_PICK, p);
+			}
+		}
+		break;
+		case "SANTA_PICK_COLLECT":{
+			if (!Files.getDataFile().contains("Players." + p.getUniqueId() + ".Received")){
+				p.closeInventory();
+				PresentType.getKit(p).givePresent(p);
+			}else{
+				p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1f, 1f);
+			}
+		}
+		break;
+		case "SANTA_WISH":{
+			SantaPickMenu.open(p);
+		}
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
 	
 	@SuppressWarnings("deprecation")
 	public ItemStack getItemFor(Player p){
@@ -1490,8 +1657,8 @@ public enum MenuItem {
 		}
 		case "PARTICLE_NONE":{
 			List<String> lore = new ArrayList<String>();
-			lore.add(ChatColor.GRAY + "Click to reset your particle effect.");
-			return ItemAPI.getItem(Material.GLASS, ChatColor.AQUA + "Reset Particle Effect", lore);
+			lore.add(ChatColor.GRAY + "Click to remove your particle effect.");
+			return ItemAPI.getItem(Material.BARRIER, ChatColor.AQUA + "Reset Particle Effect", lore);
 		}
 		case "PARTICLE_SEASONAL":{
 			List<String> lore = new ArrayList<String>();
@@ -1502,7 +1669,44 @@ public enum MenuItem {
 			if (!ParticleType.SEASONAL.hasBought(p)){
 				lore.add("§9Unlockable in the voting altar.");
 			}
-			return ItemAPI.getItem(Material.PUMPKIN, "§3Seasonal Bond", lore);
+			ItemStack i = new ItemStack(31, 1, (byte)2);
+			ItemMeta im = i.getItemMeta();
+			im.setDisplayName("§3Seasonal Bond");
+			im.setLore(lore);
+			i.setItemMeta(im);
+			return i;
+		}
+		case "PARTICLE_LET":{
+			List<String> lore = new ArrayList<String>();
+			lore.add(ChatColor.GRAY + "Click to activate the Let it Snow particle effect.");
+			lore.add(ChatColor.GRAY + "It looks like a small snowstorm happening");
+			lore.add(ChatColor.GRAY + "around your body.");
+			lore.add("");
+			if (!ParticleType.LET_IT.hasBought(p)){
+				lore.add("§aUnlockable in §bPresents§a.");
+			}
+			ItemStack i = new ItemStack(Material.SNOW_BALL);
+			ItemMeta im = i.getItemMeta();
+			im.setDisplayName("§3Let it Snow");
+			im.setLore(lore);
+			i.setItemMeta(im);
+			return i;
+		}
+		case "PARTICLE_CORRUPT":{
+			List<String> lore = new ArrayList<String>();
+			lore.add(ChatColor.GRAY + "Click to activate the Corrupt particle effect.");
+			lore.add(ChatColor.GRAY + "A circle of corrupt chest particles float");
+			lore.add(ChatColor.GRAY + "and move around your body.");
+			lore.add("");
+			if (!ParticleType.CORRUPT.hasBought(p)){
+				lore.add("§9Unlockable in Corrupt Chests.");
+			}
+			ItemStack i = new ItemStack(Material.ENDER_CHEST);
+			ItemMeta im = i.getItemMeta();
+			im.setDisplayName("§3Corrupt");
+			im.setLore(lore);
+			i.setItemMeta(im);
+			return i;
 		}
 		case "PARTICLE_HALO":{
 			List<String> lore = new ArrayList<String>();
@@ -1579,6 +1783,138 @@ public enum MenuItem {
 				lore.add("§9Unlockable in the voting altar.");
 			}
 			return ItemAPI.getItem(Material.NETHERRACK, "§3Hell's Charge", lore);
+		}
+		case "SANTA_DAILY":{
+			ItemStack item = SantaMorph.getRandomPresent();
+			ItemMeta itemm = item.getItemMeta();
+			List<String> lore = new ArrayList<String>();
+			lore.add("§7Everyday from now until january 5th");
+			lore.add("§7you will be able to receive");
+			lore.add("§b2 presents §7everyday!");
+			lore.add("");
+			Calendar c = Calendar.getInstance();
+			int day = c.get(Calendar.DAY_OF_YEAR);
+			int pday = -10;
+			if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Daily")){
+				pday = Files.getDataFile().getInt("Players." + p.getUniqueId() + ".Daily");
+			}
+			if (pday != day){
+				lore.add("§aClick to claim 2 presents!");
+				itemm.setDisplayName("§a§lDaily Gift");
+			}else{
+				lore.add("§cAlready claimed todays presents.");
+				itemm.setDisplayName("§c§lDaily Gift");
+			}
+			itemm.setLore(lore);
+			item.setItemMeta(itemm);
+			return item;
+		}
+		case "SANTA_SECRET":{
+			ItemStack item = new ItemStack(397, 1, (byte)3);
+			ItemMeta itemm = item.getItemMeta();
+			List<String> lore = new ArrayList<String>();
+			lore.add("§7Everyday from now until january 5th");
+			lore.add("§7you can give 1 person a secret santa");
+			lore.add("§7gift of §b1 present§7.");
+			lore.add("");
+			lore.add("§7To give a secret santa, do §e/SecretSanta (Name)§7.");
+			Calendar c = Calendar.getInstance();
+			int day = c.get(Calendar.DAY_OF_YEAR);
+			int pday = -10;
+			if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Secret")){
+				pday = Files.getDataFile().getInt("Players." + p.getUniqueId() + ".Secret");
+			}
+			if (pday != day){
+				itemm.setDisplayName("§a§lSecret Santa");
+			}else{
+				lore.add("");
+				lore.add("§cAlready gave someone a gift today.");
+				itemm.setDisplayName("§c§lSecret Santa");
+			}
+			itemm.setLore(lore);
+			item.setItemMeta(itemm);
+			return item;
+		}
+		case "SANTA_WISH":{
+			ItemStack item = new ItemStack(Material.BOOK);
+			ItemMeta itemm = item.getItemMeta();
+			List<String> lore = new ArrayList<String>();
+			lore.add("§7Click this to ask santa for a");
+			lore.add("§7big present. Starting the 25th");
+			lore.add("§7you will be able to claim that present.");
+			lore.add("");
+			lore.add("§aNow available!");
+			itemm.setDisplayName("§a§lWish List");
+			itemm.setLore(lore);
+			item.setItemMeta(itemm);
+			return item;
+		}
+		case "SANTA_PICK_CORRUPT":{
+			List<String> lore = new ArrayList<String>();
+			lore.add("§7Click this to ask santa for Corrupt");
+			lore.add("§7chests. You will be able to claim your");
+			lore.add("§7present starting the 25th.");
+			lore.add("");
+			lore.add("§eThis gift contains:");
+			lore.add("§a● §77 Corrupt chests.");
+			lore.add("§a● §77 Corrupt keys.");
+			if (PresentType.getKit(p).equals(PresentType.CORRUPT)){
+				lore.add("");
+				lore.add("§aSelected!");
+			}
+			return ItemAPI.getItem(Material.ENDER_CHEST, "§bCorrupt Chests", lore);
+		}
+		case "SANTA_PICK_ULTRA":{
+			List<String> lore = new ArrayList<String>();
+			lore.add("§7Click this to ask santa for a Ultra");
+			lore.add("§7tool. You will be able to claim your");
+			lore.add("§7present starting the 25th.");
+			lore.add("");
+			lore.add("§eThis gift contains:");
+			lore.add("§a● §71 random ultra tool.");
+			if (PresentType.getKit(p).equals(PresentType.ULTRA)){
+				lore.add("");
+				lore.add("§aSelected!");
+			}
+			return ItemAPI.getItem(Material.DIAMOND_PICKAXE, "§bUltra tool", lore);
+		}
+		case "SANTA_PICK_FREE":{
+			List<String> lore = new ArrayList<String>();
+			lore.add("§7Click this to ask santa for a Free");
+			lore.add("§7rankup. You will be able to claim your");
+			lore.add("§7present starting the 25th.");
+			lore.add("");
+			lore.add("§eThis gift contains:");
+			lore.add("§a● §71 free cell block rankup.");
+			if (PresentType.getKit(p).equals(PresentType.FREE_RANKUP)){
+				lore.add("");
+				lore.add("§aSelected!");
+			}
+			return ItemAPI.getItem(Material.IRON_FENCE, "§bFree rankup", lore);
+		}
+		case "SANTA_PICK_CURRENCY":{
+			List<String> lore = new ArrayList<String>();
+			lore.add("§7Click this to ask santa for a Currency");
+			lore.add("§7pack. You will be able to claim your");
+			lore.add("§7present starting the 25th.");
+			lore.add("");
+			lore.add("§eThis gift contains:");
+			lore.add("§a● §75000 crystals.");
+			lore.add("§a● §7200 pickaxe shards.");
+			lore.add("§a● §720 favor points.");
+			if (PresentType.getKit(p).equals(PresentType.CURRENCY)){
+				lore.add("");
+				lore.add("§aSelected!");
+			}
+			return ItemAPI.getItem(Material.EMERALD, "§bCurrency Pack", lore);
+		}
+		case "SANTA_PICK_COLLECT":{
+			List<String> lore = new ArrayList<String>();
+			lore.add("§7Click this to collect the present you");
+			lore.add("§7asked for!");
+			lore.add("");
+			lore.add("§aPresent available to collect!");
+			return ItemAPI.getItem(Material.CHEST, "§bCollect Present", lore);
 		}
 		}
 		return new ItemStack(Material.AIR);

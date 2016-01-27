@@ -29,7 +29,7 @@ public class ItemBuyerMenu {
 		ItemStack confirm = new ItemStack(35, 1, (byte)5);
 		ItemMeta barrierm = barrier.getItemMeta();
 		ItemMeta confirmm = confirm.getItemMeta();
-		barrierm.setDisplayName("§c§lBarrier");
+		barrierm.setDisplayName("§7Place items in this inventory");
 		confirmm.setDisplayName("§a§lSell Items");
 		barrier.setItemMeta(barrierm);
 		confirm.setItemMeta(confirmm);
