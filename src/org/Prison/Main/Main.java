@@ -1,15 +1,17 @@
 package org.Prison.Main;
 
+import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 import me.BenLoe.Blackmarket.Stats.Stats;
@@ -39,8 +41,6 @@ import org.Prison.Main.RegionChecker.DonatorCellLine;
 import org.Prison.Main.Trails.ParticleType;
 import org.Prison.Main.Traits.SpeedTrait;
 import org.Prison.Main.Tutorial.Tutorial;
-import org.Prison.Punish.PunishAPI;
-import org.Prison.Punish.SQLAccess;
 import org.PrisonMain.Achievement.AchievementAPI;
 import org.PrisonMain.Achievement.Menu.AchievementMenu;
 import org.bukkit.Bukkit;
@@ -53,20 +53,30 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Rabbit;
+import org.bukkit.entity.Rabbit.Type;
 import org.bukkit.entity.Sheep;
-import org.bukkit.event.player.PlayerPreLoginEvent.Result;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
+
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 
 public class Main extends JavaPlugin {
 
@@ -91,30 +101,32 @@ public class Main extends JavaPlugin {
 	public static HashMap<String,String> MineVote = new HashMap<>();
 	public static boolean playerv = true;
 	public static boolean monthly = false;
+	public static HashMap<UUID,String> rabbit = new HashMap<UUID,String>();
+	public static HashMap<UUID,UUID> armor = new HashMap<UUID,UUID>();
 	
 	@SuppressWarnings("deprecation")
 	public void onEnable(){
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		Scoreboard board = manager.getMainScoreboard();
 		Team owner = board.registerNewTeam("Owner");
-		owner.setPrefix("Â§cÂ§lOWNER Â§c");
+		owner.setPrefix("§c§lOWNER §c");
 		Team admin = board.registerNewTeam("Admin");
-		admin.setPrefix("Â§cÂ§lADMIN Â§c");
+		admin.setPrefix("§c§lADMIN §c");
 		Team mod = board.registerNewTeam("Mod");
-		mod.setPrefix("Â§4Â§lMOD Â§4");
+		mod.setPrefix("§4§lMOD §4");
 		Team jrmod = board.registerNewTeam("JrMod");
-		jrmod.setPrefix("Â§4Â§lJRMOD Â§4");
+		jrmod.setPrefix("§4§lJRMOD §4");
 		Team ultra = board.registerNewTeam("Ultra");
-		ultra.setPrefix("Â§6Â§lULTRA Â§6");
+		ultra.setPrefix("§6§lULTRA §6");
 		Team elite = board.registerNewTeam("Elite");
-		elite.setPrefix("Â§aÂ§lELITE Â§a");
+		elite.setPrefix("§a§lELITE §a");
 		Team vip = board.registerNewTeam("Vip");
-		vip.setPrefix("Â§3Â§lVIP Â§3");
+		vip.setPrefix("§3§lVIP §3");
 		Team normal = board.registerNewTeam("Normal");
-		normal.setPrefix("Â§7");
+		normal.setPrefix("§7");
 		Files.saveDataFile();
 		if (!Files.getLogFile().contains("Log")){
-			Files.getLogFile().set("Log", new ArrayList<String>());
+			Files.getLogFile().set("Log", new ArrayList<String>()); 
 			Files.saveLogFile();
 		}
 		Bukkit.getScheduler().runTaskLater(this, new Runnable(){
@@ -129,13 +141,13 @@ public class Main extends JavaPlugin {
 				Sheep sheep2 = (Sheep) Bukkit.getWorld("PrisonMap").spawnEntity(new Location(Bukkit.getWorld("PrisonMap"), -217, 70, 194), EntityType.SHEEP);
 				Sheep sheep3 = (Sheep) Bukkit.getWorld("PrisonMap").spawnEntity(new Location(Bukkit.getWorld("PrisonMap"), -217, 70, 194), EntityType.SHEEP);	
 				sheep1.setColor(DyeColor.RED);
-				sheep1.setCustomName("Â§cÂ§lPunch Me!");
+				sheep1.setCustomName("§c§lPunch Me!");
 				sheep1.setCustomNameVisible(true);
 				sheep2.setColor(DyeColor.LIME);
-				sheep2.setCustomName("Â§aÂ§lPunch Me!");
+				sheep2.setCustomName("§a§lPunch Me!");
 				sheep2.setCustomNameVisible(true);
 				sheep3.setColor(DyeColor.BLUE);
-				sheep3.setCustomName("Â§9Â§lPunch Me!");
+				sheep3.setCustomName("§9§lPunch Me!");
 				sheep3.setCustomNameVisible(true);
 				sheeps.add(sheep1.getUniqueId());
 				sheeps.add(sheep2.getUniqueId());
@@ -258,56 +270,6 @@ public class Main extends JavaPlugin {
 						}
 					}
 				}
-				Calendar c = Calendar.getInstance();
-				if (!Files.getDataFile().contains("StatHour")){
-					Files.getDataFile().set("StatHour", c.get(Calendar.HOUR_OF_DAY));
-					Files.saveDataFile();
-				}
-				int filetime = Files.getDataFile().getInt("StatHour");
-				if (filetime != c.get(Calendar.HOUR_OF_DAY)){
-					if (Files.getLogFile().getStringList("Log").size() != 0){
-					int average = 0;
-					for (String s : Files.getLogFile().getStringList("Log")){
-						int time = Integer.parseInt(s.split(": ")[1]);
-						average += time;
-					}
-					average = (int) Math.round(average / Files.getLogFile().getStringList("Log").size());
-					SQLAccess.openConnection();
-					try {
-						PreparedStatement sql = SQLAccess.connection.prepareStatement("SELECT * FROM `PlayersOnline` WHERE `Hour`=?");
-						sql.setInt(1, filetime);
-						ResultSet rs = sql.executeQuery();
-						rs.first();
-						double currentaverage = rs.getInt(2);
-						int timeschecked = rs.getInt(3);
-						if (timeschecked < 4){
-							timeschecked++;
-						}
-						double percent = 100 / timeschecked;
-						int newaverage = (int) Math.round(currentaverage * ((100.0 - percent)/100) + average * (percent)/100);
-						sql.close();
-						rs.close();
-						PreparedStatement sql1 = SQLAccess.connection.prepareStatement("UPDATE `PlayersOnline` SET `Average`=?,`TimesChecked`? WHERE `Hour`=?");
-						sql1.setInt(1, newaverage);
-						sql1.setInt(2, timeschecked);
-						sql1.setInt(3, filetime);
-						sql1.executeUpdate();
-						sql1.close();
-						SQLAccess.closeConnection();
-						
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					}
-					Files.getLogFile().set("Log", new ArrayList<String>());
-					Files.saveLogFile();
-					Files.getDataFile().set("HourStat", c.get(Calendar.HOUR_OF_DAY));
-				}else{
-					List<String> log = Files.getLogFile().getStringList("Log");
-					log.add("Players: " + Bukkit.getOnlinePlayers().size());
-					Files.getLogFile().set("Log", log);
-					Files.saveLogFile();
-				}
 				BoosterCooldown.checkCooldown("Money1");
 				if (!BoosterCooldown.hasCooldown("Money1")){
 					if (Files.getDataFile().getStringList("MoneyPlayers").size() > 13){
@@ -367,7 +329,7 @@ public class Main extends JavaPlugin {
 	public void onDisable(){
 		for (Player p : Bukkit.getOnlinePlayers()){
 			if (Main.Vanish.contains(p.getName())){
-				p.sendMessage("Â§cÂ§lNo longer vanished.");
+				p.sendMessage("§c§lNo longer vanished.");
 				p.setPlayerListName(RankType.getPlayerColor(RankType.getRank(p)) + p.getName());
 				for (Player p1 : Bukkit.getOnlinePlayers()){
 					if (!OptionAPI.isEnabled(OptionType.VISIBILITY, p1.getName())){
@@ -437,7 +399,7 @@ public class Main extends JavaPlugin {
 					}else{
 						String message = "";
 						for(int i = 0; i < args.length; i++) message += (i != 0 ? " " : "") + args[i];
-						ChatMessages.sendStaffMessage(p, message.replace("&", "Â§"));
+						ChatMessages.sendStaffMessage(p, message.replace("&", "§"));
 					}
 				}else{
 					p.sendMessage(ChatColor.RED + "Staff only command.");
@@ -446,7 +408,7 @@ public class Main extends JavaPlugin {
 			if (Label.equalsIgnoreCase("SetLetter")){
 				if (p.hasPermission("Letter.Set")){
 					if (args.length == 2){
-						if (PunishAPI.onlinePlayer(args[0])){
+						if (Bukkit.getPlayer(args[0]) != null){
 							p.sendMessage(ChatColor.GREEN + "Player's letter set to " + args[1]);
 							Files.getDataFile().set("Players." + Bukkit.getPlayer(args[0]).getUniqueId() + ".Letter", args[1]);
 							Files.saveDataFile();
@@ -461,7 +423,7 @@ public class Main extends JavaPlugin {
 			if (Label.equalsIgnoreCase("SetSpeed")){
 				if (p.hasPermission("Speed.Set")){
 					if (args.length == 2){
-						if (PunishAPI.onlinePlayer(args[0])){
+						if (Bukkit.getPlayer(args[0]) != null){
 							p.sendMessage(ChatColor.GREEN + "Player's speed set to " + args[1]);
 							Files.getDataFile().set("Players." + Bukkit.getPlayer(args[0]).getUniqueId() + ".Speed", Integer.parseInt(args[1]));
 							Files.saveDataFile();
@@ -476,7 +438,7 @@ public class Main extends JavaPlugin {
 			if (Label.equalsIgnoreCase("SetIntellect")){
 				if (p.hasPermission("Letter.Set")){
 					if (args.length == 2){
-						if (PunishAPI.onlinePlayer(args[0])){
+						if (Bukkit.getPlayer(args[0]) != null){
 							p.sendMessage(ChatColor.GREEN + "Player's intellect set to " + args[1]);
 							Files.getDataFile().set("Players." + Bukkit.getPlayer(args[0]).getUniqueId() + ".Smartlvl", Integer.parseInt(args[1]));
 							Files.saveDataFile();
@@ -614,7 +576,7 @@ public class Main extends JavaPlugin {
 			if (Label.equalsIgnoreCase("pVanish")){
 				if (p.hasPermission("Vanish.Vanish")){
 					if (Main.Vanish.contains(p.getName())){
-						p.sendMessage("Â§cÂ§lNo longer vanished.");
+						p.sendMessage("§c§lNo longer vanished.");
 						p.setPlayerListName(RankType.getPlayerColor(RankType.getRank(p)) + p.getName());
 						for (Player p1 : Bukkit.getOnlinePlayers()){
 							if (!OptionAPI.isEnabled(OptionType.VISIBILITY, p1.getName())){
@@ -627,8 +589,8 @@ public class Main extends JavaPlugin {
 						}
 						Main.Vanish.remove(p.getName());
 					}else{
-						p.sendMessage("Â§aÂ§lYou are vanished from normal players.");
-						p.setPlayerListName(RankType.getPlayerColor(RankType.getRank(p)) + p.getName() + " Â§7[Vanished]");
+						p.sendMessage("§a§lYou are vanished from normal players.");
+						p.setPlayerListName(RankType.getPlayerColor(RankType.getRank(p)) + p.getName() + " §7[Vanished]");
 						for (Player p1 : Bukkit.getOnlinePlayers()){
 							if (!p1.hasPermission("Vanish.See")){
 								p1.hidePlayer(p);
@@ -647,7 +609,7 @@ public class Main extends JavaPlugin {
 					return true;
 				}
 				if (args.length < 1 || args.length > 2){
-					p.sendMessage("Â§cWrong syntax: /SecretSanta (Name)");
+					p.sendMessage("§cWrong syntax: /SecretSanta (Name)");
 				}else{
 					Calendar c = Calendar.getInstance();
 					int day = c.get(Calendar.DAY_OF_YEAR);
@@ -657,31 +619,31 @@ public class Main extends JavaPlugin {
 					}
 					if (pday != day){
 						if (args[0].equalsIgnoreCase(p.getName())){
-							p.sendMessage("Â§2Â§l[Â§4Â§lSantaÂ§2Â§l]: Â§cHO HO No... you can't give secret santa's to yourself!");
+							p.sendMessage("§2§l[§4§lSanta§2§l]: §cHO HO No... you can't give secret santa's to yourself!");
 							return true;
 						}
 						if (Bukkit.getPlayer(args[0]) != null){
 							if (Game.playerInGame(Bukkit.getPlayer(args[0]))){
-								p.sendMessage("Â§2Â§l[Â§4Â§lSantaÂ§2Â§l]: Â§cThat player is in a super spleef game, please wait until they leave.");
+								p.sendMessage("§2§l[§4§lSanta§2§l]: §cThat player is in a super spleef game, please wait until they leave.");
 								return true;
 							}
 							ItemStack presents = SantaMorph.getRandomPresent();
 							ItemMeta itemm = presents.getItemMeta();
-							itemm.setDisplayName("Â§bÂ§lPresent Â§7(Right click altar)");
+							itemm.setDisplayName("§b§lPresent §7(Right click altar)");
 							presents.setItemMeta(itemm);
 							Player give = Bukkit.getPlayer(args[0]);
-							give.sendMessage("Â§2Â§l[Â§4Â§lSantaÂ§2Â§l]: Â§bSomeone just sent you a secret santa of 1 present!");
+							give.sendMessage("§2§l[§4§lSanta§2§l]: §bSomeone just sent you a secret santa of 1 present!");
 							give.playSound(give.getLocation(), Sound.LEVEL_UP, 1f, 1f);
 							give.getInventory().addItem(presents);
 							give.updateInventory();
-							p.sendMessage("Â§2Â§l[Â§4Â§lSantaÂ§2Â§l]: Â§aYour secret santa has been sent!");
+							p.sendMessage("§2§l[§4§lSanta§2§l]: §aYour secret santa has been sent!");
 							Files.getDataFile().set("Players." + p.getUniqueId() + ".Secret", day);
 							Files.saveDataFile();
 						}else{
-							p.sendMessage("Â§2Â§l[Â§4Â§lSantaÂ§2Â§l]: Â§cThat player is not online!");
+							p.sendMessage("§2§l[§4§lSanta§2§l]: §cThat player is not online!");
 						}
 					}else{
-						p.sendMessage("Â§2Â§l[Â§4Â§lSantaÂ§2Â§l]: Â§cYou already sent someone a secret santa today!");
+						p.sendMessage("§2§l[§4§lSanta§2§l]: §cYou already sent someone a secret santa today!");
 					}
 				}
 			}
@@ -711,13 +673,7 @@ public class Main extends JavaPlugin {
 			}
 			if (p.isOp()){
 				if (Label.equalsIgnoreCase("test2")){
-					Set<String> Favor = me.BenLoe.quest.Files.getDataFile().getConfigurationSection("Players").getKeys(false);
-					for (String s : Favor){
-						if (!s.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")){
-							me.BenLoe.quest.Files.getDataFile().set("Players." + s, null);
-						}
-					}
-					me.BenLoe.quest.Files.saveDataFile();
+					DeviceType.SURGE.addAmount(2, p);
 				}
 				if (Label.equalsIgnoreCase("test3")){
 					p.sendMessage("test3 received");
@@ -727,7 +683,7 @@ public class Main extends JavaPlugin {
 					if (args.length == 1){
 						DeviceType.VOTING_KEY.setDevice(Bukkit.getPlayer(args[0]));
 						DeviceType.VOTING_KEY.addAmount(1, Bukkit.getPlayer(args[0]));
-						Bukkit.getPlayer(args[0]).sendMessage("Â§aÂ§lThanks Â§afor voting. To use your voting key, go to Â§e/warp altar Â§aand right click the voting altar with it.");
+						Bukkit.getPlayer(args[0]).sendMessage("§a§lThanks §afor voting. To use your voting key, go to §e/warp altar §aand right click the voting altar with it.");
 						Bukkit.getPlayer(args[0]).playSound(Bukkit.getPlayer(args[0]).getLocation(), Sound.LEVEL_UP, 1f, 1f);
 						ItemAPI.givePlayerItems(Bukkit.getPlayer(args[0]));
 						if (Files.getDataFile().contains("Players." + Bukkit.getPlayer(args[0]).getUniqueId() + ".Votes")){
@@ -746,9 +702,9 @@ public class Main extends JavaPlugin {
 					}
 					
 					if (args.length == 2){
-						DeviceType.VOTING_KEY.setDevice(Bukkit.getPlayer(args[1]));
+						DeviceType.VOTING_KEY.setDevice(Bukkit.getPlayer(args[0]));
 						DeviceType.VOTING_KEY.addAmount(Integer.parseInt(args[1]), Bukkit.getPlayer(args[0]));
-						Bukkit.getPlayer(args[0]).sendMessage("Â§aÂ§lThanks Â§afor voting. To use your voting key, go to Â§e/warp altar Â§aand right click the voting altar with it.");
+						Bukkit.getPlayer(args[0]).sendMessage("§a§lThanks §afor voting. To use your voting key, go to §e/warp altar §aand right click the voting altar with it.");
 						Bukkit.getPlayer(args[0]).playSound(Bukkit.getPlayer(args[0]).getLocation(), Sound.LEVEL_UP, 1f, 1f);
 						ItemAPI.givePlayerItems(Bukkit.getPlayer(args[0]));
 					}
@@ -767,7 +723,7 @@ public class Main extends JavaPlugin {
 					}
 				}
 				if (Label.equalsIgnoreCase("test1")){
-					p.sendMessage("Â§aÂ§lCollect stats...");
+					p.sendMessage("§a§lCollect stats...");
 					int votes = 1517;
 					int speed = 0;
 					int intellect = 0;
@@ -896,7 +852,7 @@ public class Main extends JavaPlugin {
 				if (args.length == 1){
 					DeviceType.VOTING_KEY.setDevice(Bukkit.getPlayer(args[0]));
 					DeviceType.VOTING_KEY.addAmount(1, Bukkit.getPlayer(args[0]));
-					Bukkit.getPlayer(args[0]).sendMessage("Â§aÂ§lThanks Â§afor voting. To use your voting key, go to Â§e/warp altar Â§aand right click the voting altar with it.");
+					Bukkit.getPlayer(args[0]).sendMessage("§a§lThanks §afor voting. To use your voting key, go to §e/warp altar §aand right click the voting altar with it.");
 					Bukkit.getPlayer(args[0]).playSound(Bukkit.getPlayer(args[0]).getLocation(), Sound.LEVEL_UP, 1f, 1f);
 					ItemAPI.givePlayerItems(Bukkit.getPlayer(args[0]));
 					if (Files.getDataFile().contains("Players." + Bukkit.getPlayer(args[0]).getUniqueId() + ".Votes")){
@@ -915,9 +871,9 @@ public class Main extends JavaPlugin {
 				}
 				
 				if (args.length == 2){
-					DeviceType.VOTING_KEY.setDevice(Bukkit.getPlayer(args[1]));
+					DeviceType.VOTING_KEY.setDevice(Bukkit.getPlayer(args[0]));
 					DeviceType.VOTING_KEY.addAmount(Integer.parseInt(args[1]), Bukkit.getPlayer(args[0]));
-					Bukkit.getPlayer(args[0]).sendMessage("Â§aÂ§lThanks Â§afor voting. To use your voting key, go to Â§e/warp altar Â§aand right click the voting altar with it.");
+					Bukkit.getPlayer(args[0]).sendMessage("§a§lThanks §afor voting. To use your voting key, go to §e/warp altar §aand right click the voting altar with it.");
 					Bukkit.getPlayer(args[0]).playSound(Bukkit.getPlayer(args[0]).getLocation(), Sound.LEVEL_UP, 1f, 1f);
 					ItemAPI.givePlayerItems(Bukkit.getPlayer(args[0]));
 				}

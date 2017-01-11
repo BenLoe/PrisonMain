@@ -1339,7 +1339,7 @@ public enum MenuItem {
 			lore.add(ChatColor.GRAY + "Favor points: §e" + QuestAPI.getFavor(p));
 			lore.add("");
 			lore.add(ChatColor.GRAY + "Traits:");
-			lore.add("§9Speed    " + SpeedTrait.getProgress(p) + "§9 lvl " + SpeedTrait.getLevel(p));
+			lore.add("§9Speed     " + SpeedTrait.getProgress(p) + "§9 lvl " + SpeedTrait.getLevel(p));
 			lore.add("§eIntellect " + SmartTrait.getProgress(p) + " §elvl " + SmartTrait.getLevel(p));
 			ItemStack item = new ItemStack(397, 1, (short) 3);
 			SkullMeta itemm = (SkullMeta) item.getItemMeta();
@@ -1394,9 +1394,9 @@ public enum MenuItem {
 			ItemMeta itemm = item.getItemMeta();
 			itemm.setLore(lore);
 			if (OptionAPI.isEnabled(OptionType.VISIBILITY, p.getName())){
-				itemm.setDisplayName(ChatColor.GREEN + "✔ Player Visibility ✔");
+				itemm.setDisplayName(ChatColor.GREEN + "âœ” Player Visibility âœ”");
 			}else{
-				itemm.setDisplayName(ChatColor.RED + "✘ Player Visibility ✘");
+				itemm.setDisplayName(ChatColor.RED + "âœ˜ Player Visibility âœ˜");
 			}
 			item.setItemMeta(itemm);
 			return item;
@@ -1420,9 +1420,9 @@ public enum MenuItem {
 			ItemMeta itemm = item.getItemMeta();
 			itemm.setLore(lore);
 			if (OptionAPI.isEnabled(OptionType.VISIBILITY, p.getName())){
-				itemm.setDisplayName(ChatColor.GREEN + "✔ Player Visibility ✔");
+				itemm.setDisplayName(ChatColor.GREEN + "âœ” Player Visibility âœ”");
 			}else{
-				itemm.setDisplayName(ChatColor.RED + "✘ Player Visibility ✘");
+				itemm.setDisplayName(ChatColor.RED + "âœ˜ Player Visibility âœ˜");
 			}
 			item.setItemMeta(itemm);
 			return item;
@@ -1440,9 +1440,9 @@ public enum MenuItem {
 			ItemMeta itemm = item.getItemMeta();
 			itemm.setLore(lore);
 			if (OptionAPI.isEnabled(OptionType.LETTER, p.getName())){
-				itemm.setDisplayName(ChatColor.GREEN + "✔ Cell Block Visibility ✔");
+				itemm.setDisplayName(ChatColor.GREEN + "âœ” Cell Block Visibility âœ”");
 			}else{
-				itemm.setDisplayName(ChatColor.RED + "✘ Cell Block Visibility ✘");
+				itemm.setDisplayName(ChatColor.RED + "âœ˜ Cell Block Visibility âœ˜");
 			}
 			item.setItemMeta(itemm);
 			return item;
@@ -1468,9 +1468,9 @@ public enum MenuItem {
 			ItemMeta itemm = item.getItemMeta();
 			itemm.setLore(lore);
 			if (OptionAPI.isEnabled(OptionType.FIXED, p.getName())){
-				itemm.setDisplayName(ChatColor.GREEN + "✔ Fixed ✔");
+				itemm.setDisplayName(ChatColor.GREEN + "âœ” Fixed âœ”");
 			}else{
-				itemm.setDisplayName(ChatColor.RED + "✘ Fixed ✘");
+				itemm.setDisplayName(ChatColor.RED + "âœ˜ Fixed âœ˜");
 			}
 			item.setItemMeta(itemm);
 			return item;
@@ -1492,9 +1492,9 @@ public enum MenuItem {
 			ItemMeta itemm = item.getItemMeta();
 			itemm.setLore(lore);
 			if (OptionAPI.isEnabled(OptionType.FIXED, p.getName())){
-				itemm.setDisplayName(ChatColor.GREEN + "✔ Fixed ✔");
+				itemm.setDisplayName(ChatColor.GREEN + "âœ” Fixed âœ”");
 			}else{
-				itemm.setDisplayName(ChatColor.RED + "✘ Fixed ✘");
+				itemm.setDisplayName(ChatColor.RED + "âœ˜ Fixed âœ˜");
 			}
 			item.setItemMeta(itemm);
 			return item;
@@ -1518,9 +1518,9 @@ public enum MenuItem {
 			ItemMeta itemm = item.getItemMeta();
 			itemm.setLore(lore);
 			if (OptionAPI.isEnabled(OptionType.LETTER, p.getName())){
-				itemm.setDisplayName(ChatColor.GREEN + "✔ Cell Block Visibility ✔");
+				itemm.setDisplayName(ChatColor.GREEN + "âœ” Cell Block Visibility âœ”");
 			}else{
-				itemm.setDisplayName(ChatColor.RED + "✘ Cell Block Visibility ✘");
+				itemm.setDisplayName(ChatColor.RED + "âœ˜ Cell Block Visibility âœ˜");
 			}
 			item.setItemMeta(itemm);
 			return item;
@@ -1538,9 +1538,9 @@ public enum MenuItem {
 			ItemMeta itemm = item.getItemMeta();
 			itemm.setLore(lore);
 			if (OptionAPI.isEnabled(OptionType.FRIENDS, p.getName())){
-				itemm.setDisplayName(ChatColor.GREEN + "✔ Friend Requests ✔");
+				itemm.setDisplayName(ChatColor.GREEN + "âœ” Friend Requests âœ”");
 			}else{
-				itemm.setDisplayName(ChatColor.RED + "✘ Friend Requests ✘");
+				itemm.setDisplayName(ChatColor.RED + "âœ˜ Friend Requests âœ˜");
 			}
 			item.setItemMeta(itemm);
 			return item;
@@ -1563,9 +1563,9 @@ public enum MenuItem {
 			ItemMeta itemm = item.getItemMeta();
 			itemm.setLore(lore);
 			if (OptionAPI.isEnabled(OptionType.FRIENDS, p.getName())){
-				itemm.setDisplayName(ChatColor.GREEN + "✔ Friend Requests ✔");
+				itemm.setDisplayName(ChatColor.GREEN + "âœ” Friend Requests âœ”");
 			}else{
-				itemm.setDisplayName(ChatColor.RED + "✘ Friend Requests ✘");
+				itemm.setDisplayName(ChatColor.RED + "âœ˜ Friend Requests âœ˜");
 			}
 			item.setItemMeta(itemm);
 			return item;
@@ -1583,9 +1583,9 @@ public enum MenuItem {
 			ItemMeta itemm = item.getItemMeta();
 			itemm.setLore(lore);
 			if (OptionAPI.isEnabled(OptionType.ACHIEVEMENTS, p.getName())){
-				itemm.setDisplayName(ChatColor.GREEN + "✔ Achievement Messages ✔");
+				itemm.setDisplayName(ChatColor.GREEN + "âœ” Achievement Messages âœ”");
 			}else{
-				itemm.setDisplayName(ChatColor.RED + "✘ Achievement Messages ✘");
+				itemm.setDisplayName(ChatColor.RED + "âœ˜ Achievement Messages âœ˜");
 			}
 			item.setItemMeta(itemm);
 			return item;
@@ -1608,15 +1608,15 @@ public enum MenuItem {
 			ItemMeta itemm = item.getItemMeta();
 			itemm.setLore(lore);
 			if (OptionAPI.isEnabled(OptionType.ACHIEVEMENTS, p.getName())){
-				itemm.setDisplayName(ChatColor.GREEN + "✔ Achievement Messages ✔");
+				itemm.setDisplayName(ChatColor.GREEN + "âœ” Achievement Messages âœ”");
 			}else{
-				itemm.setDisplayName(ChatColor.RED + "✘ Achievement Messages ✘");
+				itemm.setDisplayName(ChatColor.RED + "âœ˜ Achievement Messages âœ˜");
 			}
 			item.setItemMeta(itemm);
 			return item;
 		}
 		case "OPTION_MENU_BACK":{
-			return ItemAPI.getItem(Material.ARROW, "§8◄ Back", null);
+			return ItemAPI.getItem(Material.ARROW, "§8â—„ Back", null);
 		}
 		case "TELEPORT_HOME":{
 			List<String> lore = new ArrayList<String>();
@@ -1625,7 +1625,7 @@ public enum MenuItem {
 			return ItemAPI.getItem(Material.COMPASS, ChatColor.AQUA + "Teleport to Spawn", lore);
 		}
 		case "TELEPORT_BACK":{
-			return ItemAPI.getItem(Material.ARROW, "§8◄ Back", null);
+			return ItemAPI.getItem(Material.ARROW, "§8â—„ Back", null);
 		}
 		case "TELEPORT_MINES":{
 			List<String> lore = new ArrayList<String>();
@@ -1653,7 +1653,7 @@ public enum MenuItem {
 			return ItemAPI.getItem(Material.ENCHANTMENT_TABLE, ChatColor.AQUA + "Teleport to the Voting Altar", lore);
 		}
 		case "PARTICLE_BACK":{
-			return ItemAPI.getItem(Material.ARROW, "§8◄ Back", null);
+			return ItemAPI.getItem(Material.ARROW, "§8â—„ Back", null);
 		}
 		case "PARTICLE_NONE":{
 			List<String> lore = new ArrayList<String>();
@@ -1856,8 +1856,8 @@ public enum MenuItem {
 			lore.add("§7present starting the 25th.");
 			lore.add("");
 			lore.add("§eThis gift contains:");
-			lore.add("§a● §77 Corrupt chests.");
-			lore.add("§a● §77 Corrupt keys.");
+			lore.add("§aâ—� §77 Corrupt chests.");
+			lore.add("§aâ—� §77 Corrupt keys.");
 			if (PresentType.getKit(p).equals(PresentType.CORRUPT)){
 				lore.add("");
 				lore.add("§aSelected!");
@@ -1871,7 +1871,7 @@ public enum MenuItem {
 			lore.add("§7present starting the 25th.");
 			lore.add("");
 			lore.add("§eThis gift contains:");
-			lore.add("§a● §71 random ultra tool.");
+			lore.add("§aâ—� §71 random ultra tool.");
 			if (PresentType.getKit(p).equals(PresentType.ULTRA)){
 				lore.add("");
 				lore.add("§aSelected!");
@@ -1885,7 +1885,7 @@ public enum MenuItem {
 			lore.add("§7present starting the 25th.");
 			lore.add("");
 			lore.add("§eThis gift contains:");
-			lore.add("§a● §71 free cell block rankup.");
+			lore.add("§aâ—� §71 free cell block rankup.");
 			if (PresentType.getKit(p).equals(PresentType.FREE_RANKUP)){
 				lore.add("");
 				lore.add("§aSelected!");
@@ -1899,9 +1899,9 @@ public enum MenuItem {
 			lore.add("§7present starting the 25th.");
 			lore.add("");
 			lore.add("§eThis gift contains:");
-			lore.add("§a● §75000 crystals.");
-			lore.add("§a● §7200 pickaxe shards.");
-			lore.add("§a● §720 favor points.");
+			lore.add("§aâ—� §75000 crystals.");
+			lore.add("§aâ—� §7200 pickaxe shards.");
+			lore.add("§aâ—� §720 favor points.");
 			if (PresentType.getKit(p).equals(PresentType.CURRENCY)){
 				lore.add("");
 				lore.add("§aSelected!");

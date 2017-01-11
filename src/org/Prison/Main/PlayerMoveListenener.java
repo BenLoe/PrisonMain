@@ -45,7 +45,7 @@ public class PlayerMoveListenener implements Listener{
 			}
 			if (!p.getWorld().getName().equals("PVP") && !p.getWorld().getName().equals("Build") && event.getTo().getBlockY() < 6 && p.getLocation().clone().subtract(0, 1, 0).getBlock().getType() == Material.GRASS){
 				p.teleport(Main.getLocation("spawn"));
-				p.sendMessage(ChatColor.YELLOW + "You got out of the map so we teleported you back, your welcome.");
+				p.sendMessage(ChatColor.YELLOW + "You got out of the map so we teleported you back, you're welcome.");
 			}
 		}
 		if (Main.Tutorialint.containsKey(p.getName())){

@@ -328,7 +328,6 @@ public class JoinEvent {
 				t.setFadeInTime(1);
 				t.setStayTime(4);
 				t.setFadeOutTime(1);
-				t.send(p);
 			    int current = 0;
 				if (Files.getDataFile().contains("Players." + p.getUniqueId() + ".Votes")){
 					current = Files.getDataFile().getInt("Players." + p.getUniqueId() + ".Votes");

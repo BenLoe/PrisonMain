@@ -12,9 +12,8 @@ import org.Prison.Main.Options.OptionAPI;
 import org.Prison.Main.Options.OptionType;
 import org.Prison.Main.Ranks.RankType;
 import org.Prison.Main.mkremins.fanciful.FancyMessage;
+import org.Prison.Punish.Files;
 import org.Prison.Punish.PunishAPI;
-import org.Prison.Punish.Stats;
-import org.Stats.main.PlayerFile;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -27,77 +26,47 @@ public class ChatMessages {
 	public static void execute(PlayerChatEvent event){
 		event.setCancelled(true);
 		if (inStaff.contains(event.getPlayer().getName())){
-			sendStaffMessage(event.getPlayer(), event.getMessage().replace("&", "Â§"));
+			sendStaffMessage(event.getPlayer(), event.getMessage().replace("&", "§"));
 			return;
 		}
 		if (Main.chatSilenced){
 			event.getPlayer().sendMessage(ChatColor.RED + "Chat has temporarily been silenced by staff.");
 			return;
 		}
-		if (PunishAPI.ifPlayerIsMuted(event.getPlayer().getUniqueId().toString())){
-			event.getPlayer().sendMessage("Â§cÂ§lYou are muted for" + org.Prison.Punish.Cooldown.getTimeLeft(event.getPlayer().getUniqueId().toString(), "Mute") + "Â§cÂ§l.");
-		}else{
-			if (event.getPlayer().hasPermission("Stats.trackmessage")){
-				PlayerFile pf = org.Stats.main.Files.getPlayerFile(event.getPlayer().getName());
-				List<String> log = new ArrayList<>();
-				Calendar c = Calendar.getInstance();
-				String date = c.get(Calendar.YEAR) + "-" + (c.get(Calendar.MONTH) + 1) + "-" + c.get(Calendar.DAY_OF_MONTH);
-				if (pf.getFile().contains(date + ".MessageLog")){
-					log.addAll(pf.getFile().getStringList(date + ".MessageLog"));
-				}
-				log.add(0, event.getMessage());
-				pf.getFile().set(date + ".MessageLog", log);
-				pf.saveFile();
-			}
-			if (RankType.getRank(event.getPlayer()).equals(RankType.OWNER) || RankType.getRank(event.getPlayer()).equals(RankType.ADMIN)){
-				event.setMessage(event.getMessage().replace("&", "Â§"));
-			}
+		if (RankType.getRank(event.getPlayer()).equals(RankType.OWNER) || RankType.getRank(event.getPlayer()).equals(RankType.ADMIN)){
+			event.setMessage(event.getMessage().replace("&", "§"));
+		}
+		if (PunishAPI.ifPlayerIsMuted(event.getPlayer())){
+			String reason = Files.getDataFile().getString("Currents." + event.getPlayer().getUniqueId() + ".mutereason");
+			new FancyMessage("§cYou are muted for another " + org.Prison.Punish.Cooldown.getTimeLeftAlt(event.getPlayer().getUniqueId().toString(), "Mute") + ".")
+			.then(" §7§oHover for reason").tooltip(org.Prison.Punish.Menu.format(reason)).send(event.getPlayer());
+			return;
+		}
 		for (Player p : Bukkit.getOnlinePlayers()){
 			if (!Main.Tutorialint.containsKey(p.getName())){
-				if (p.hasPermission("Punish.Notify")){
-					if (OptionAPI.isEnabled(OptionType.LETTER, p.getName())){
-						if (RankType.getRank(event.getPlayer()).equals(RankType.NONE)){
-							sendMessage1(p, event.getPlayer(), event.getMessage());
-						}else if (RankType.getRank(p).equals(RankType.OWNER) || RankType.getRank(p).equals(RankType.ADMIN)){
-							sendMessage2(p, event.getPlayer(), event.getMessage());
-						}else{
-						sendMessage2(p, event.getPlayer(), event.getMessage());
-						}
-						}else{
-							if (RankType.getRank(event.getPlayer()).equals(RankType.NONE)){
-								sendMessage3(p, event.getPlayer(), event.getMessage());
-							}else if (RankType.getRank(p).equals(RankType.OWNER) || RankType.getRank(p).equals(RankType.ADMIN)){
-								sendMessage4(p, event.getPlayer(), event.getMessage());
-							}else{
-								sendMessage4(p, event.getPlayer(), event.getMessage());
-							}
-						}
-				}else{
 			if (OptionAPI.isEnabled(OptionType.LETTER, p.getName())){
 			if (RankType.getRank(event.getPlayer()).equals(RankType.NONE)){
-				p.sendMessage("Â§8[" + LetterType.getColoredString(LetterType.getPlayerLetter(event.getPlayer())) + "Â§8] " + RankType.getPlayerColor(RankType.getRank(event.getPlayer())) + event.getPlayer().getName() + ":" + "Â§f " + event.getMessage());	
+				p.sendMessage("§8[" + LetterType.getColoredString(LetterType.getPlayerLetter(event.getPlayer())) + "§8] " + RankType.getPlayerColor(RankType.getRank(event.getPlayer())) + event.getPlayer().getName() + ":" + "§f " + event.getMessage());	
 			}else if (RankType.getRank(p).equals(RankType.OWNER) || RankType.getRank(p).equals(RankType.ADMIN)){
-				p.sendMessage("Â§8[" + LetterType.getColoredString(LetterType.getPlayerLetter(event.getPlayer())) + "Â§8] " + RankType.toNiceName(RankType.getRank(event.getPlayer())) + RankType.getPlayerColor(RankType.getRank(event.getPlayer())) + " " + event.getPlayer().getName() + ":" + "Â§f " + event.getMessage());
+				p.sendMessage("§8[" + LetterType.getColoredString(LetterType.getPlayerLetter(event.getPlayer())) + "§8] " + RankType.toNiceName(RankType.getRank(event.getPlayer())) + RankType.getPlayerColor(RankType.getRank(event.getPlayer())) + " " + event.getPlayer().getName() + ":" + "§f " + event.getMessage());
 			}else{
-			p.sendMessage("Â§8[" + LetterType.getColoredString(LetterType.getPlayerLetter(event.getPlayer())) + "Â§8] " + RankType.toNiceName(RankType.getRank(event.getPlayer())) + RankType.getPlayerColor(RankType.getRank(event.getPlayer())) + " " + event.getPlayer().getName() + ":" + "Â§f " + event.getMessage());
+			p.sendMessage("§8[" + LetterType.getColoredString(LetterType.getPlayerLetter(event.getPlayer())) + "§8] " + RankType.toNiceName(RankType.getRank(event.getPlayer())) + RankType.getPlayerColor(RankType.getRank(event.getPlayer())) + " " + event.getPlayer().getName() + ":" + "§f " + event.getMessage());
 			}
 			}else{
 				if (RankType.getRank(event.getPlayer()).equals(RankType.NONE)){
-					p.sendMessage(RankType.getPlayerColor(RankType.getRank(event.getPlayer())) + event.getPlayer().getName() + ":" + "Â§f " + event.getMessage());	
+					p.sendMessage(RankType.getPlayerColor(RankType.getRank(event.getPlayer())) + event.getPlayer().getName() + ":" + "§f " + event.getMessage());	
 				}else if (RankType.getRank(p).equals(RankType.OWNER) || RankType.getRank(p).equals(RankType.ADMIN)){
-					p.sendMessage(RankType.toNiceName(RankType.getRank(event.getPlayer())) + RankType.getPlayerColor(RankType.getRank(event.getPlayer())) + " " + event.getPlayer().getName() + ":" + "Â§f " + event.getMessage());
+					p.sendMessage(RankType.toNiceName(RankType.getRank(event.getPlayer())) + RankType.getPlayerColor(RankType.getRank(event.getPlayer())) + " " + event.getPlayer().getName() + ":" + "§f " + event.getMessage());
 				}else{
-				p.sendMessage(RankType.toNiceName(RankType.getRank(event.getPlayer())) + RankType.getPlayerColor(RankType.getRank(event.getPlayer())) + " " + event.getPlayer().getName() + ":" + "Â§f " + event.getMessage());
+				p.sendMessage(RankType.toNiceName(RankType.getRank(event.getPlayer())) + RankType.getPlayerColor(RankType.getRank(event.getPlayer())) + " " + event.getPlayer().getName() + ":" + "§f " + event.getMessage());
 				}
 			}
 				}
-		}
-		}
 		}
 	}
 	
 	
-	public static void sendMessage1(Player p, Player p1, String message){
+/*	public static void sendMessage1(Player p, Player p1, String message){
 		FancyMessage f = new FancyMessage("Â§8[" + LetterType.getColoredString(LetterType.getPlayerLetter(p1)) + "Â§8] " + RankType.getPlayerColor(RankType.getRank(p1)))
 			.then(RankType.getPlayerColor(RankType.getRank(p1)) + p1.getName())
 				.tooltip("Â§cBans: x" + Stats.getBans(p1.getName()), "Â§6TempBans: x" + Stats.getTemps(p1.getName()), "Â§eMutes: x" + Stats.getMutes(p1.getName()), "Â§aKicks: x" + Stats.getKicks(p1.getName()), "Â§fÂ§lClick to quick mute Â§b" + p1.getName() + "Â§fÂ§l for 2 minutes.")
@@ -258,7 +227,7 @@ public class ChatMessages {
 			at++;
 		}
 		f.send(p);
-	}
+	}*/
 	
 	public static void sendStaffMessage(Player sender, String message){
 		for (Player p : Bukkit.getOnlinePlayers()){

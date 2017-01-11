@@ -438,7 +438,7 @@ public class Events implements Listener{
 			ParticleType.seasonal.remove(p.getName());
 		}
 	}
-	@EventHandler
+	@EventHandler (ignoreCancelled = true)
 	public void chatEvent(PlayerChatEvent event){
 		ChatMessages.execute(event);
 	}

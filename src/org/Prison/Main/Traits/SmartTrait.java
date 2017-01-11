@@ -115,50 +115,50 @@ public class SmartTrait {
 		double needed = getNeeded(lvl);
 		double percent = (smart / needed) * 100;
 		if (percent < 99 && percent > 92.5){
-			return "§e▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍§7▍";
+			return "§e❚❚❚❚❚❚❚❚❚❚❚❚❚❚§7❚";
 		}
 		if (percent < 92.4 && percent > 85.9){
-			return "§e▍▍▍▍▍▍▍▍▍▍▍▍▍▍§7▍▍";
+			return "§e❚❚❚❚❚❚❚❚❚❚❚❚❚❚§7❚";
 		}
 		if (percent < 85.8 && percent > 79.3){
-			return "§e▍▍▍▍▍▍▍▍▍▍▍▍▍§7▍▍▍";
+			return "§e❚❚❚❚❚❚❚❚❚❚❚❚❚❚§7❚❚";
 		}
 		if (percent < 79.2 && percent > 72.7){
-			return "§e▍▍▍▍▍▍▍▍▍▍▍▍§7▍▍▍▍";
+			return "§e❚❚❚❚❚❚❚❚❚❚❚❚❚§7❚❚❚";
 		}
 		if (percent < 72.6 && percent > 66.1){
-			return "§e▍▍▍▍▍▍▍▍▍▍§7▍▍▍▍▍▍";
+			return "§e❚❚❚❚❚❚❚❚❚❚❚❚§7❚❚❚❚";
 		}
 		if (percent < 66 && percent > 59.5){
-			return "§e▍▍▍▍▍▍▍▍▍§7▍▍▍▍▍▍▍";
+			return "§e❚❚❚❚❚❚❚❚❚❚❚§7❚❚❚❚❚";
 		}
 		if (percent < 59.4 && percent > 52.9){
-			return "§e▍▍▍▍▍▍▍▍§7▍▍▍▍▍▍▍▍";
+			return "§e❚❚❚❚❚❚❚❚❚❚§7❚❚❚❚❚❚";
 		}
 		if (percent < 52.8 && percent > 46.3){
-			return "§e▍▍▍▍▍▍▍§7▍▍▍▍▍▍▍▍▍";
+			return "§e❚❚❚❚❚❚❚❚§7❚❚❚❚❚❚❚";
 		}
 		if (percent < 46.2 && percent > 39.7){
-			return "§e▍▍▍▍▍▍§7▍▍▍▍▍▍▍▍▍▍";
+			return "§e❚❚❚❚❚❚❚§7❚❚❚❚❚❚❚❚";
 		}
 		if (percent < 39.6 && percent > 33.1){
-			return "§e▍▍▍▍▍§7▍▍▍▍▍▍▍▍▍▍▍";
+			return "§e❚❚❚❚❚§7❚❚❚❚❚❚❚❚❚❚";
 		}
 		if (percent < 33 && percent > 26.5){
-			return "§e▍▍▍▍§7▍▍▍▍▍▍▍▍▍▍▍▍";
+			return "§e❚❚❚❚§7❚❚❚❚❚❚❚❚❚❚❚";
 		}
 		if (percent < 26.4 && percent > 19.9){
-			return "§e▍▍▍§7▍▍▍▍▍▍▍▍▍▍▍▍▍";
+			return "§e❚❚❚§7❚❚❚❚❚❚❚❚❚❚❚❚";
 		}
 		if (percent < 19.8 && percent > 13.3){
-			return "§e▍▍§7▍▍▍▍▍▍▍▍▍▍▍▍▍▍";
+			return "§e❚❚§7❚❚❚❚❚❚❚❚❚❚❚❚❚";
 		}
 		if (percent < 13.2 && percent > 6.7){
-			return "§e▍§7▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍";
+			return "§e❚§7❚❚❚❚❚❚❚❚❚❚❚❚❚❚";
 		}
 		if (percent < 6.6){
-			return "§7▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍";
+			return "§7❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚";
 		}
-		return "§e▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍§7▍";
+		return "§e❚❚❚❚❚❚❚❚❚❚❚❚❚❚§7❚";
 	}
 }
